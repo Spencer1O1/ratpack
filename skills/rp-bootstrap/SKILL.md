@@ -1,73 +1,40 @@
 ---
 name: rp-bootstrap
-description: Adopt Ratpack in a new or existing project by reconciling contributor instructions, roles, GitHub/Linear setup, and devel/main branches. Use for initial setup or an explicit adoption upgrade, not routine task coordination.
+description: Adopt Ratpack in a new or existing project by reconciling contributor guidance, roles, and GitHub/Linear setup. Use for setup or an explicit adoption upgrade, not ongoing coordination.
 ---
 
 # Ratpack Bootstrap
 
-Read [the shared workflow](references/workflow.md). It is the human-facing
-policy to install in the project. Roles are generic; never import another
-project's names, account identifiers, requirements, or production settings.
+Read [the workflow](references/workflow.md) and the target project's existing
+instructions, requirements, ownership, and handoff. Preserve existing policy and
+authority until deliberate adoption decisions are made; do not import another
+project's names, account identifiers, or production settings.
 
-## Bootstrap
+1. Inspect status, branches, worktrees, remotes, checks, and active ownership.
+   Prepare changes in an isolated worktree when the checkout is occupied.
+2. Discover existing GitHub/Linear connections, repository, team, projects,
+   statuses, labels, and permissions. Resolve missing setup decisions with the
+   human, including integration ownership and delegation under the workflow.
+3. Reconcile contributor guidance, `ratpack.json`, PR template, and native
+   profiles with existing files. Keep one project workflow; merge into its
+   owning documents rather than replacing instructions or creating rivals.
+4. Configure the agreed branch policy, protections, and tracker conventions
+   within actual authorization. Record unsupported settings or pending access.
+5. Run local checks and realistic adoption checks. Verify external settings and
+   automation separately; generated files alone are not evidence they work.
+   Verify native discovery in a trusted fresh/reloaded session before claiming
+   activation; preserve global trust, model, and permission settings.
+6. Hand setup changes to independent review/integration. Report installed files,
+   verified behavior, pending external setup, source revision when known, and
+   next owner/action. End at setup handoff rather than starting product work.
 
-1. Inspect the target repository's instructions, status, worktrees, branches,
-   remotes, checks, and current task ownership. Preserve existing work. Use an
-   isolated branch/worktree for setup in an occupied repository.
-2. Reuse existing GitHub/Linear connections. Discover the actual repository,
-   team, projects, statuses, labels, and issues before creating anything. Ask
-   only for missing decisions you cannot discover. Do not assume a connection
-   can edit every setting; record unavailable operations accurately.
-3. Agree on the integration owner and delegation scope from the user's request
-   and existing authorization, including support/review agents. Starting a
-   Ratpack does not silently grant spawning, publishing, or release authority.
-   Propose a useful concurrent implementation worker count and brief task split;
-   the user may approve it or choose a different number. Record the approved
-   count; there is no default of two. Until approval, keep any existing authorized
-   limit and do not exceed it. A null limit means no approved count. Use bounded
-   assignments from the workflow's role briefs, respect host capacity, and reuse
-   existing approval. Request an increase only when useful.
-4. Prepare `ratpack.json`, contributor/agent guidance, a short PR template, and
-   the five native Codex profiles under `.codex/agents/`.
-   The helper below previews or installs starter files only when they will not
-   overwrite different content. With existing docs, reconcile manually into
-   their owning files and retain one canonical workflow. Do not replace a
-   project's entire AGENTS.md or create a competing contributor guide. Existing
-   native profiles also require deliberate reconciliation; never overwrite them
-   merely to adopt Ratpack.
-5. Require `devel` for integration and `main` for releases. Prepare any necessary
-   migration without rewriting history. New repository initialization and
-   external writes follow the user's actual authorization. Configure default
-   branch, merge options, protections, and Linear conventions where supported.
-   Never claim unavailable protections or untested automation are enabled.
-6. Validate links, check commands, assignments, and applicable CI. Hand setup
-   changes to independent review and the integration owner. Report what is
-   installed, what is verified, and the specific remaining external setup.
-
-From this skill's directory, preview starter files in an existing project:
+The helper previews starter files in an existing directory and refuses to
+overwrite differing content or write through symlink output paths:
 
 ```bash
 python3 scripts/bootstrap.py /path/to/project --owner coordinator-name
 ```
 
-Add `--apply` to write the previewed files. Python 3.11+ is required. The
-helper does not change Git state or accounts. Complete `checks` and connection
-fields in `ratpack.json` using the project's actual commands and identifiers.
-Generated docs describe the adopted workflow, not proof of configured services.
-
-Codex discovers the profiles in a trusted project. Use a fresh/reloaded session
-and verify available native agent names before claiming runtime activation;
-TOML parsing alone is not evidence of discovery or successful spawning.
-Profiles inherit the parent's model, sandbox/approval settings, and MCP access.
-Do not silently change global trust, permissions, or model settings to activate
-them.
-
-Human-created conversations remain valid. Have a peer explicitly read the same
-role file and project instructions for its assignment; naming the conversation
-does not activate a native profile or confer merge authority.
-
-Finish when setup changes are reviewed/integrated and the handoff names what is
-installed, what was verified, any outstanding external setup, and the next
-owner/action. Do not expand setup into product implementation. Ongoing work
-uses the project's adopted workflow; `rp-coordinate` provides that procedure
-when available. Installing a newer skill does not upgrade an existing project.
+Run from this skill's directory with Python 3.11+. Add `--apply` to write.
+The helper does not change Git or accounts. Reconcile conflicts manually and
+fill configuration from the project's actual commands and identifiers.

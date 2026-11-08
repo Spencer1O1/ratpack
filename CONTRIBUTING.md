@@ -1,9 +1,15 @@
 # Contributing to Ratpack
 
-Use the [shared workflow](skills/rp-bootstrap/references/workflow.md). Submit one
-reviewable change into `devel`; independent review and passing CI precede a
-squash merge by the integration owner recorded in `ratpack.json`.
+Follow the [contributor workflow](skills/rp-bootstrap/references/workflow.md).
+Agents also read [AGENTS.md](AGENTS.md).
 
-Run the two validation commands in [README.md](README.md). Changes to the skill
-or templates should be checked against a realistic adoption scenario, including
-existing files and unavailable integrations. Agents also read [AGENTS.md](AGENTS.md).
+Run with Python 3.11 or newer; the helpers use only the standard library:
+
+```bash
+python3 scripts/check.py
+python3 -m unittest discover -s tests -v
+```
+
+For skill or template changes, also exercise the affected procedure in an
+isolated adoption scenario, including existing files and unavailable
+integrations. Report what was tested and what remains unverified.

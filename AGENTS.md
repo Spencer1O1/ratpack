@@ -1,13 +1,14 @@
 # Ratpack repository instructions
 
-Follow [CONTRIBUTING.md](CONTRIBUTING.md) and the
-[shared workflow](skills/rp-bootstrap/references/workflow.md). This repository builds
-the reusable workflow; it does not own the product plans of adopting projects.
+Follow [CONTRIBUTING.md](CONTRIBUTING.md). This repository maintains the reusable
+workflow; adopting projects retain their own product plans and configuration.
 
-Keep the policy generic and human-readable. Store project-specific assignments
-only in that project's `ratpack.json`. Preserve the required devel/main policy.
-Do not duplicate the canonical workflow across README, skill, and templates.
-Test bootstrap changes for dry-run behavior, idempotence, and preservation of
-existing files. Do not publish credentials, task histories, or private project
-details. Initial publication is authorized by the user; later releases need
-their explicit approval.
+- Shared policy belongs in `skills/rp-bootstrap/references/workflow.md`.
+  Skills describe procedures; native profiles select role briefs; the README
+  is an entry point. Link policy instead of copying it between these layers.
+- Keep repository authority, staffing, and custom roles in that repository's
+  `ratpack.json`; keep task ownership and dependencies in its tracker.
+- Keep packaged profiles and this repository's `.codex/agents/` copies aligned.
+  Bootstrap changes must preserve preview, idempotence, and conflict protection.
+- Keep credentials and adopting projects' private data out of this public repo.
+  Initial publication is authorized; releases still require user approval.
