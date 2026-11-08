@@ -69,6 +69,39 @@ only when it distinguishes concurrent or specialized workers, such as
 internal names require underscores. Each assignment still has its own bounded
 brief and ownership record.
 
+### Model and reasoning effort
+
+Choose model and reasoning effort for each assignment, including review and
+support, rather than inheriting an expensive coordinator setting by accident.
+Use the lightest host-available setting likely to meet the task's acceptance
+criteria, considering ambiguity, failure impact, context needs, and validation.
+Role names do not select a model. Honor explicit human model choices and project
+constraints; do not change global defaults or other conversations to optimize one
+task. Routine selection within those constraints needs no new permission prompt.
+
+| Assignment | Starting choice |
+| --- | --- |
+| Mechanical edits, extraction, or a scoped fix with strong checks | Efficient model, low or medium effort |
+| Nontrivial implementation or analysis with clear boundaries | Balanced model, medium effort |
+| Ambiguous design, difficult debugging, or consequential changes with weak checks | Stronger model and/or higher effort |
+
+These are starting points, not a universal ranking or measured savings. Select
+review settings from the change's risk independently of its author's model; a
+small diff can have serious consequences. If reasoning, checks, or review expose
+a capability gap, narrow the task or escalate model/effort rather than repeatedly
+retrying an inadequate setting. Fix environmental failures as environmental
+failures, not automatic model upgrades. Preserve independent review and acceptance
+criteria when using a cheaper model.
+
+Record requested model/effort and a brief reason in the task assignment; record
+effective settings only when the host exposes evidence, otherwise mark them
+unverified. For existing peers, preserve the human's settings and explain any
+recommended change. If the host cannot choose a suitable setting, disclose the
+fallback and continue only when it can meet acceptance; do not claim a switch.
+Compare quality, rework, and time on representative tasks, plus usage/cost only
+when available, before claiming an optimization. Keep temporary measurements in
+the tracker; record durable project model constraints in `ratpack.json`.
+
 ### Custom roles and native profiles
 
 The human may add, change, or retire a role through the coordinator at any time.
@@ -80,8 +113,9 @@ another skill; use the role procedure when maintaining a native definition.
 Bootstrap supplies `ratpack_coordinator`, `ratpack_implementor`,
 `ratpack_reviewer`, `ratpack_cleanup`, and `ratpack_workflow` profiles in
 `.codex/agents/`. Profiles select these role briefs; skills provide procedures.
-Profiles inherit the parent's model, sandbox/approvals, and MCP access. Behavioral
-read-only instructions are not a separate sandbox. Verify discovery in a trusted,
+Packaged profiles leave model/effort unpinned so dispatch can select them;
+otherwise the host's inheritance/defaults apply. Sandbox/approvals and MCP access
+follow the parent. Behavioral read-only instructions are not a separate sandbox. Verify discovery in a trusted,
 fresh/reloaded session before claiming activation; another host may use the same
 briefs without native discovery. Renaming a conversation does not activate a profile.
 
