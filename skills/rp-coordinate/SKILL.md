@@ -14,7 +14,9 @@ and resolve it before dispatch; do not install or upgrade policy as a side effec
    Resolve stale ownership and dependencies against their authoritative records.
 2. Turn the requested outcome into bounded tasks. Apply the project's staffing
    and ordering rules, record decisions, and assign eligible work with clear
-   ownership, interfaces, acceptance evidence, and handoff routes.
+   ownership, interfaces, acceptance evidence, and handoff routes. Select and
+   apply task-appropriate model/effort using [dispatch guidance](references/model-routing.md);
+   record requested versus effective settings and reassess when work changes.
 3. Collect results and arrange independent review. Check the current revision
    and evidence against acceptance; return findings to the assigned implementor.
 4. Integrate only in the assigned integration-owner role. Update tracker state
