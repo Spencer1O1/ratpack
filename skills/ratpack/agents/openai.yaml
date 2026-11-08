@@ -1,4 +1,0 @@
-interface:
-  display_name: "Ratpack"
-  short_description: "Coordinate agents, Linear tasks, and GitHub PRs"
-  default_prompt: "Use $ratpack to bootstrap this project and coordinate implementation, independent review, and integration."

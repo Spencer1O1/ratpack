@@ -1,6 +1,6 @@
 # Contributing to Ratpack
 
-Use the [shared workflow](skills/ratpack/references/workflow.md). Submit one
+Use the [shared workflow](skills/rp-bootstrap/references/workflow.md). Submit one
 reviewable change into `devel`; independent review and passing CI precede a
 squash merge by the integration owner recorded in `ratpack.json`.
 

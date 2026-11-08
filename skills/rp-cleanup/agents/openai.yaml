@@ -1,4 +1,4 @@
 interface:
   display_name: "Ratpack Cleanup"
   short_description: "Audit maintainability and make focused cleanup fixes"
-  default_prompt: "Use $ratpack-cleanup to audit this project area or implement its requested bounded cleanup fixes."
+  default_prompt: "Use $rp-cleanup to audit this project area or implement its requested bounded cleanup fixes."

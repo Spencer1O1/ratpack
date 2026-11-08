@@ -1,5 +1,5 @@
 ---
-name: ratpack-cleanup
+name: rp-cleanup
 description: Audit a bounded Ratpack project area for maintainability problems or implement requested, focused cleanup fixes. Use for scoped cleanup work, not speculative redesign or unrelated behavior changes.
 ---
 

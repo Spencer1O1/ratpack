@@ -1,5 +1,5 @@
 ---
-name: ratpack-review
+name: rp-review
 description: Independently review an identified Ratpack commit or PR against project requirements and report findings, checks, and limitations for the exact revision. Use for requested independent review, not implementation or self-approval.
 ---
 

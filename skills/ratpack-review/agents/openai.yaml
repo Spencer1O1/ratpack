@@ -1,4 +1,0 @@
-interface:
-  display_name: "Ratpack Review"
-  short_description: "Review an exact revision with independent evidence"
-  default_prompt: "Use $ratpack-review to independently review this revision against its requirements and report findings and checks."

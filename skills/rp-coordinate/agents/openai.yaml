@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ratpack Coordinate"
+  short_description: "Plan tasks and coordinate authorized Ratpack work"
+  default_prompt: "Use $rp-coordinate to plan and coordinate this project's tasks, workers, review, and integration."

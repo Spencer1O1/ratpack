@@ -11,7 +11,7 @@ This branch arrangement is required for Ratpack projects.
 
 Point your coordinator at this repository:
 
-> Read the Ratpack skill at `skills/ratpack/SKILL.md` in
+> Read the Ratpack bootstrap skill at `skills/rp-bootstrap/SKILL.md` in
 > https://github.com/Spencer1O1/ratpack and bootstrap Ratpack in this project.
 > Preserve existing instructions. You are the coordinator and integration owner.
 > Propose how many concurrent implementation workers would help and why; I will
@@ -21,15 +21,15 @@ Point your coordinator at this repository:
 > missing information you cannot discover. Releases still need my approval.
 
 For a local checkout, give the agent the absolute path to
-`skills/ratpack/SKILL.md`. To install the complete set for reuse, ask Codex's
-skill installer to install `skills/ratpack`, `skills/ratpack-role`,
-`skills/ratpack-review`, and `skills/ratpack-cleanup` from `Spencer1O1/ratpack`
-at the chosen revision.
-Then invoke `$ratpack` to bootstrap a project.
+`skills/rp-bootstrap/SKILL.md`. To install the complete set for reuse, ask Codex's
+skill installer to install `skills/rp-bootstrap`, `skills/rp-coordinate`,
+`skills/rp-role`, `skills/rp-review`, and `skills/rp-cleanup` from
+`Spencer1O1/ratpack` at the chosen revision.
+Invoke `$rp-bootstrap` for setup and `$rp-coordinate` for ongoing work.
 Pin the source commit when adopting a version; fetching the URL does not itself
 install a skill or activate instructions in another conversation.
 
-The [bootstrap skill](skills/ratpack/SKILL.md) inspects the project, prepares
+The [bootstrap skill](skills/rp-bootstrap/SKILL.md) inspects the project, prepares
 local contributor guidance, records assignments and checks, and reconciles the
 tracker and repository settings within the user's authorization. Its optional
 Python helper previews files first and refuses to overwrite existing content.
@@ -37,7 +37,7 @@ Existing projects can adopt the same workflow through small manual edits.
 
 ## How it works
 
-Read the [shared workflow](skills/ratpack/references/workflow.md) for roles,
+Read the [shared workflow](skills/rp-bootstrap/references/workflow.md) for roles,
 delegation, branch policy, review, and handoffs. The project keeps its own
 `ratpack.json` assignment record and contributor guide; changes to this upstream
 repository do not silently change an existing project's policy.
@@ -63,10 +63,22 @@ human; they do not need to become subagents or acquire a particular name.
 
 | Skill | Use |
 | --- | --- |
-| [ratpack](skills/ratpack/SKILL.md) | Bootstrap and coordinate the project |
-| [ratpack-role](skills/ratpack-role/SKILL.md) | Create, update, or retire a custom brief and native definition |
-| [ratpack-review](skills/ratpack-review/SKILL.md) | Independently review a specific revision and report evidence |
-| [ratpack-cleanup](skills/ratpack-cleanup/SKILL.md) | Audit a bounded area and implement requested maintainability fixes |
+| [rp-bootstrap](skills/rp-bootstrap/SKILL.md) | Adopt Ratpack and verify project setup |
+| [rp-coordinate](skills/rp-coordinate/SKILL.md) | Plan and coordinate an adopted project's work |
+| [rp-role](skills/rp-role/SKILL.md) | Create, update, or retire a custom brief and native definition |
+| [rp-review](skills/rp-review/SKILL.md) | Independently review a specific revision and report evidence |
+| [rp-cleanup](skills/rp-cleanup/SKILL.md) | Audit a bounded area and implement requested maintainability fixes |
+
+Skills are procedures, not one-to-one role definitions. Use one when its task
+fits; creating a role does not automatically require another skill. Bootstrap
+owns the reusable workflow and installs it into the project; coordination reads
+that adopted copy rather than carrying a second policy. Each skill can be
+installed on its own for its scope.
+
+The previous skill names (`ratpack`, `ratpack-role`, `ratpack-review`, and
+`ratpack-cleanup`) are replaced by the names above. Update installed skills and
+invocation references deliberately; older pinned versions remain valid. Native
+`ratpack_*` agent profile names and existing project assignments are unchanged.
 
 Task ordering is generic: ask for implementation, documentation, research,
 cleanup, or any custom-role work now, next, or after specific tickets. The
@@ -74,7 +86,7 @@ coordinator records scope and explicit dependencies; "after current tickets"
 captures a fixed batch rather than a growing backlog. Deferred tasks survive
 conversation restarts in the tracker. They run while the coordinator is active
 or on resume; dependencies alone do not wake a stopped agent. See
-[requests and ordering](skills/ratpack/references/workflow.md#requests-and-ordering).
+[requests and ordering](skills/rp-bootstrap/references/workflow.md#requests-and-ordering).
 
 Roles are extensible: tell the coordinator to add a project-specific role such
 as research, with its scope and expected output. The coordinator records the
