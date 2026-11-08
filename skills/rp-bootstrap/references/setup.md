@@ -54,15 +54,47 @@ destination. Do not make the user discover the commands themselves.
 See [Codex MCP configuration](https://learn.chatgpt.com/docs/extend/mcp) and
 [Linear's MCP documentation](https://linear.app/docs/mcp) for current setup.
 
+## Reconcile the Linear team
+
+After verifying workspace/team access, inspect the team's issue statuses and
+applicable issue labels, including workspace labels available to that team.
+Compare them with the workflow's [Linear conventions](workflow.md#linear).
+Reuse equivalent existing names and IDs; do not recreate them for each project
+or confuse issue labels with project labels. Create only missing issue labels
+through supported tools and read them back. For missing statuses or unsupported
+label edits, direct the user to Settings > Teams > the actual team > Issue
+statuses, or that team's issue Labels settings. Name each missing value and its
+status category from the workflow; confirm the resulting values before claiming setup.
+Keep documentation work in the same status workflow, not a separate docs state.
+
 ## Linear's GitHub integration
 
-Guide the user through the workspace's Settings > Integrations > GitHub, then
-the team's Automations page. Explain that GitHub repository access and a
-workspace connection must both complete. If GitHub shows an existing installation
-but Linear shows no connection, inspect the return flow and which workspace owns
-the installation before recommending changes. Preserve other projects' access.
+1. Inspect the workspace's Settings > Integrations > GitHub connection and
+   repository access. If UI access is required, tell the user to enable the
+   integration there, select the intended GitHub owner/repository, complete
+   authorization, and return to Linear. A Codex MCP connection does not prove
+   this integration exists. If GitHub shows an existing installation but Linear
+   shows no connection, inspect the return flow and which workspace owns the
+   installation before recommending changes. Preserve other projects' access.
+2. Inspect this team's Automations > Pull request automations. Reconcile against
+   the workflow's [event mapping](workflow.md#linear). When tools cannot inspect
+   or change these settings, provide a numbered UI checklist with the team's
+   actual name, each event and destination, and the following branch steps.
+   Ask the user to confirm the saved settings or inspect their screenshot;
+   do not claim configuration from a successful GitHub connection alone.
+3. Under Branch-specific rules, use Add branch for target `devel`, or edit the
+   existing matching rule. Apply the canonical mapping there; do not create
+   duplicate rules or overwrite the team's defaults or unrelated branch rules.
+   Explain that the target is where a PR merges, not its feature branch. Check
+   for broader rules that would interfere. Team rules affect all its projects;
+   resolve incompatible conventions with existing owners before changing them.
+4. Exercise a real task PR with a closing reference such as `Fixes TEAM-123`.
+   Observe automatic attachment and draft/ready/review/merge behavior separately
+   from manual edits. A draft already In Progress is not proof of a draft-triggered
+   transition. Record what was inspected, observed, and remains unverified in the
+   setup task; keep work moving with manual updates if needed. Prefer the next
+   real task over manufacturing a code change just to exercise an event.
 
-For the workflow's `devel` automation, use Branch-specific rules > Add branch on
-the team Automations page. Verify linking and transitions against a real PR and
-report manual updates separately. Follow [Linear's official GitHub setup](https://linear.app/docs/github)
-for current UI and workspace restrictions rather than guessing from app permissions.
+Follow [Linear's official GitHub setup](https://linear.app/docs/github) and
+[issue properties documentation](https://linear.app/docs/issue-properties-home)
+for current UI and workspace restrictions rather than guessing from permissions.
