@@ -14,9 +14,10 @@ that the coordinator arranges helpers and independent review; implementation
 staffing is proposed when there is actual implementation ready to assign.
 
 For GitHub settings, name the repository, proposed changes, and any decision
-that affects the human. Check whether another GitHub account can approve PRs
-before proposing a required approval count. Follow the workflow's review policy;
-never present a second-account requirement as an unexplained default. If an
+that affects the human. Follow the workflow's default of independent agent
+review, passing CI, and coordinator integration with no GitHub approval click.
+Explain any existing GitHub approval requirement and its available approvers;
+do not invent that requirement during setup. If an
 approval system rejects the action, explain its reason and request the specific
 approval needed; do not retry around the rejection or silently weaken protections.
 

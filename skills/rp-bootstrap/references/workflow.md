@@ -218,10 +218,12 @@ Merge `main` back into `devel` after release. Track release completion separatel
 from implementation; temporary release branches may stabilize a release.
 
 Protect both branches with PRs and CI where available; prohibit direct/force
-pushes. Set required GitHub approving-review counts to match available reviewers:
-a GitHub approval needs a different account from the PR author. If agents share
-one account, retain independent exact-revision review evidence and required CI
-without an unsatisfiable GitHub approval count. Preserve existing protections;
+pushes. The default is independent agent review followed by the integration
+owner's merge after passing CI, with zero required GitHub approving reviews.
+Do not ask the human to sign in with a second GitHub account to approve agents'
+PRs. Require GitHub approvals only when the human requests them or existing
+repository policy requires them; an approving account must differ from the PR
+author's. Preserve existing protections;
 relaxing them requires explicit human approval. Disclose unavailable protections
 and apply the checklist manually; visibility/billing changes need user approval. A branch is not proof
 of deployment or product readiness.

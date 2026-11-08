@@ -455,6 +455,21 @@
         "retain_handoff_in_conversation": true,
         "claim_setup_complete": false
       }
+    },
+    {
+      "id": "bootstrap-review-default",
+      "request": "Recommend GitHub protections for a newly adopted Ratpack repository. Return require_github_approval_click, require_independent_agent_review, coordinator_merges_after_review_and_ci (booleans), plus user_message (short recommendation).",
+      "context": {
+        "repo": "new with no existing approval policy",
+        "user": "adopt Ratpack; no request for GitHub approvals",
+        "accounts": "human has another GitHub account available",
+        "host": "independent review agents available"
+      },
+      "expected": {
+        "require_github_approval_click": false,
+        "require_independent_agent_review": true,
+        "coordinator_merges_after_review_and_ci": true
+      }
     }
   ]
 }
