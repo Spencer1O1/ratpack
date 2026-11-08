@@ -275,6 +275,106 @@
         ],
         "require_code_pr": false
       }
+    },
+    {
+      "id": "unscheduled-project-request",
+      "request": "A new user message says \"Also add CSV export to alpha.\" Decide task capture and what the current worker does. Return task_to_update (ID), create_new_task, start_export_now, route_to_coordinator (booleans), continue_task (ID).",
+      "context": {
+        "current_project": "alpha",
+        "current_agent": "imp-rat",
+        "role": "implementation worker",
+        "active_task": {
+          "id": "ALPHA-1",
+          "state": "In Progress",
+          "outcome": "fix runtime ordering",
+          "worktree": "owned and occupied"
+        },
+        "new_request_timing": "not specified; no stop/reprioritization requested",
+        "existing_related_task": {
+          "id": "ALPHA-2",
+          "project": "alpha",
+          "state": "Backlog",
+          "outcome": "CSV export"
+        },
+        "available_implementation_slots": 0,
+        "coordinator": "crd-rat",
+        "task_metadata_capture_permission": true
+      },
+      "expected": {
+        "task_to_update": "ALPHA-2",
+        "create_new_task": false,
+        "start_export_now": false,
+        "route_to_coordinator": true,
+        "continue_task": "ALPHA-1"
+      }
+    },
+    {
+      "id": "clarification-on-active-task",
+      "request": "The user adds \"Make sure non-finite values are rejected before outputs, too.\" Decide task capture. Return task_to_update (ID), create_new_task, continue_current_work, queue_separate_work (booleans).",
+      "context": {
+        "current_project": "alpha",
+        "active_task": {
+          "id": "ALPHA-3",
+          "state": "In Progress",
+          "outcome": "reject invalid configuration without applying outputs",
+          "owned_paths": [
+            "configuration/"
+          ],
+          "acceptance": "all invalid numeric input is rejected atomically"
+        },
+        "new_message": "clarifies the same configuration rejection outcome, no independent feature"
+      },
+      "expected": {
+        "task_to_update": "ALPHA-3",
+        "create_new_task": false,
+        "continue_current_work": true,
+        "queue_separate_work": false
+      }
+    },
+    {
+      "id": "route-other-project",
+      "request": "While working on alpha, the user says \"For beta, add the metrics dashboard we discussed.\" Return target_project, task_to_update, handoff_to (strings), preempt_alpha, start_beta_implementation (booleans).",
+      "context": {
+        "current_project": "alpha",
+        "current_role": "alpha coordinator",
+        "active_task": "ALPHA-4",
+        "beta_coordinator": "crd-beta",
+        "existing_beta_task": {
+          "id": "BETA-7",
+          "state": "Backlog",
+          "outcome": "metrics dashboard"
+        },
+        "tracker_access": "alpha and beta available; capture and route authorized",
+        "beta_implementation_authority": "retained by crd-beta",
+        "requested_order": "not specified; no alpha cancellation"
+      },
+      "expected": {
+        "target_project": "beta",
+        "task_to_update": "BETA-7",
+        "handoff_to": "crd-beta",
+        "preempt_alpha": false,
+        "start_beta_implementation": false
+      }
+    },
+    {
+      "id": "adopt-legacy-doc-tracking",
+      "request": "Use the bootstrap procedure to adopt Ratpack and reconcile documentation ownership. Return move_transient_to_tracker, preserve_constraint_in_design, maintain_repo_backlog, erase_historical_commits (booleans).",
+      "context": {
+        "project": "gamma",
+        "existing_files": {
+          "docs/plan.md": "live tasks, priorities, status, and one durable storage invariant",
+          "docs/handoff.md": "temporary branch/owner/check results and a durable hardware interface rule"
+        },
+        "existing_tracker": "available with matching tasks; reuse records",
+        "user_authorization": "adopt workflow and reconcile docs with current owners",
+        "technical_constraints": "must remain available to contributors; no product behavior change"
+      },
+      "expected": {
+        "move_transient_to_tracker": true,
+        "preserve_constraint_in_design": true,
+        "maintain_repo_backlog": false,
+        "erase_historical_commits": false
+      }
     }
   ]
 }

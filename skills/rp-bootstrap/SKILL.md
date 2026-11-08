@@ -18,6 +18,9 @@ project's names, account identifiers, or production settings.
 3. Reconcile contributor guidance, `ratpack.json`, PR template, and native
    profiles with existing files. Keep one project workflow; merge into its
    owning documents rather than replacing instructions or creating rivals.
+   Reconcile legacy task/status/handoff mirrors with the tracker; retain their
+   durable technical constraints in owning docs and coordinate the migration
+   with current owners.
 4. Configure the agreed branch policy, protections, and tracker conventions
    within actual authorization. Record unsupported settings or pending access.
 5. Run local checks and realistic adoption checks. Verify external settings and
