@@ -54,6 +54,12 @@ owner and handoff route, have it read the project instructions and role brief,
 and avoid duplicate assignments. Peers remain human-accessible; they need not
 become subagents. Humans do not need agent session bookkeeping.
 
+Use short role names for general agents, such as `cleanup` or `review` (or the
+project's chosen names, such as `cleanrat` and `reviewrat`). Reuse suitable general
+agents across assignments. Add a task qualifier only when it distinguishes
+concurrent or specialized workers, such as `implrat_storage`. Each assignment
+still has its own bounded brief and ownership record.
+
 ### Custom roles and native profiles
 
 The human may add, change, or retire a role through the coordinator at any time.
