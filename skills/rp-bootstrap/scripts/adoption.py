@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import os
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
@@ -95,10 +96,16 @@ def source_provenance(skill, supplied=None):
             raise ValueError("Source revision must be exactly 40 hexadecimal characters")
         return supplied.lower(), "supplied"
 
+    env = os.environ.copy()
+    for key in ("GIT_DIR", "GIT_COMMON_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE"):
+        env.pop(key, None)
+    env.update(GIT_OPTIONAL_LOCKS="0", GIT_TERMINAL_PROMPT="0")
+    git_command = ["git", "--no-optional-locks", "-c", "core.fsmonitor=false"]
+
     def git(*args):
         return subprocess.run(
-            ["git", "-C", str(skill), *args], check=True, capture_output=True,
-            text=True, timeout=10,
+            [*git_command, "-C", str(skill), *args], check=True, capture_output=True,
+            text=True, timeout=10, env=env,
         ).stdout.strip()
 
     try:
@@ -117,8 +124,8 @@ def source_provenance(skill, supplied=None):
         # Git status can hide assume-unchanged files; verify actual input bytes.
         for path in inputs:
             committed = subprocess.run(
-                ["git", "-C", str(root), "show", f"{revision}:{path.relative_to(root).as_posix()}"],
-                check=True, capture_output=True, timeout=10,
+                [*git_command, "-C", str(root), "show", f"{revision}:{path.relative_to(root).as_posix()}"],
+                check=True, capture_output=True, timeout=10, env=env,
             ).stdout
             if committed != path.read_bytes():
                 return None, "unknown"

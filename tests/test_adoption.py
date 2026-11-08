@@ -3,6 +3,7 @@ import hashlib
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -62,7 +63,7 @@ class AdoptionTest(unittest.TestCase):
         (self.source_root / ".gitignore").write_text("__pycache__/\n*.pyc\n")
         self.git("add", ".")
         self.git("-c", "user.name=Test", "-c", "user.email=test@example.invalid",
-                 "commit", "--quiet", "-m", "Source fixture")
+                 "-c", "commit.gpgsign=false", "commit", "--quiet", "-m", "Source fixture")
         return self.git("rev-parse", "HEAD")
 
     def test_manifest_records_exact_generated_bytes_and_supplied_origin(self):
@@ -100,13 +101,22 @@ class AdoptionTest(unittest.TestCase):
         self.assertEqual(self.adoption.source_provenance(self.skill), (None, "unknown"))
         self.assertEqual(self.adoption.source_provenance(self.skill, SHA), (SHA, "supplied"))
 
+    def test_source_provenance_does_not_refresh_source_git_index(self):
+        head = self.commit_source()
+        workflow = self.skill / "references/workflow.md"
+        stat = workflow.stat()
+        os.utime(workflow, ns=(stat.st_atime_ns, stat.st_mtime_ns + 2_000_000_000))
+        before = snapshot(self.source_root)
+        self.assertEqual(self.adoption.source_provenance(self.skill), (head, "git-verified"))
+        self.assertEqual(before, snapshot(self.source_root))
+
     def test_unrelated_enclosing_git_repository_is_not_source_provenance(self):
         self.commit_source()
         installed = self.source_root / "plugins/rp-bootstrap"
         shutil.copytree(self.skill, installed, ignore=shutil.ignore_patterns("__pycache__"))
         self.git("add", ".")
         self.git("-c", "user.name=Test", "-c", "user.email=test@example.invalid",
-                 "commit", "--quiet", "-m", "Installed copy")
+                 "-c", "commit.gpgsign=false", "commit", "--quiet", "-m", "Installed copy")
         self.assertEqual(self.adoption.source_provenance(installed), (None, "unknown"))
 
     def test_invalid_revision_and_legacy_adoption_do_not_write(self):

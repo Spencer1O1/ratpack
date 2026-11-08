@@ -67,7 +67,7 @@ class DoctorTest(unittest.TestCase):
                 (self.project / "docs/development.md").read_bytes()).hexdigest()}
         data = dict(schema_version=1, source_revision=revision, files=files,
                     upstream_repository="https://github.com/Spencer1O1/ratpack",
-                    source_revision_origin="git-verified")
+                    source_revision_origin="git-verified" if revision else "unknown")
         (self.project / "ratpack.lock.json").write_text(json.dumps(data))
 
     def test_manual_peer_project_and_unapproved_staffing_are_supported(self):
@@ -201,6 +201,18 @@ class DoctorTest(unittest.TestCase):
         self.assertEqual(before, self.snapshot())
         self.manifest(revision=None)
         self.assertEqual(self.result()[1]["adoption.source"]["status"], "unverified")
+
+    def test_doctor_and_upgrade_reject_the_same_malformed_adoption_record(self):
+        self.manifest()
+        manifest_path = self.project / "ratpack.lock.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest.pop("source_revision")
+        manifest_path.write_text(json.dumps(manifest))
+        self.assertEqual(self.result()[1]["adoption"]["status"], "fail")
+        result = subprocess.run([sys.executable, str(SCRIPT.with_name("upgrade.py")),
+                                 str(self.project), "--json"], capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("source_revision", result.stderr)
 
     def test_unsafe_manifest_entries_are_rejected_before_hashing(self):
         outside = Path(self.temp.name) / "secret"

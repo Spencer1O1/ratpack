@@ -6,10 +6,13 @@ import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
-import re
+import runpy
 import subprocess
 import sys
 import tomllib
+
+
+ADOPTION = runpy.run_path(str(Path(__file__).with_name("adoption.py")))
 
 
 PROFILES = (
@@ -145,33 +148,21 @@ def check_profiles(root, native, add):
 
 def check_adoption(root, add):
     try:
-        manifest_path = project_path(root, "ratpack.lock.json")
-        if not manifest_path.exists():
+        manifest = ADOPTION["load_manifest"](root)
+        if manifest is None:
             add("adoption", "unverified", "No adoption record found; legacy project provenance is unknown.")
-        else:
-            manifest = json.loads(manifest_path.read_text())
-            if not isinstance(manifest, dict) or type(manifest.get("schema_version")) is not int or manifest["schema_version"] != 1:
-                raise ValueError("unsupported adoption schema")
-            revision = manifest.get("source_revision")
-            if revision is not None and (not isinstance(revision, str) or not re.fullmatch(r"[0-9a-fA-F]{40}", revision)):
-                raise ValueError("invalid source revision")
-            files = manifest.get("files")
-            if not isinstance(files, dict) or not files:
-                raise ValueError("missing baseline hashes")
-            inspected = []
-            for relative, digest in files.items():
-                path = project_path(root, relative)
-                if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", digest):
-                    raise ValueError("invalid baseline hash")
-                inspected.append((path, digest.lower()))
-            changed = sum(not p.is_file() or hashlib.sha256(p.read_bytes()).hexdigest() != digest
-                          for p, digest in inspected)
-            add("adoption.files", "warn" if changed else "pass",
-                str(changed) + " adopted files differ or are missing; inspect customization/drift before upgrade."
-                if changed else "Adopted file bytes match their recorded baseline hashes.")
-            add("adoption.source", "unverified",
-                "A source revision is recorded; this command does not verify its historical or remote provenance."
-                if revision else "The adoption source revision is unknown.")
+            return
+        changed = sum(
+            not (path := project_path(root, name)).is_file()
+            or hashlib.sha256(path.read_bytes()).hexdigest() != digest
+            for name, digest in manifest["files"].items()
+        )
+        add("adoption.files", "warn" if changed else "pass",
+            str(changed) + " adopted files differ or are missing; inspect customization/drift before upgrade."
+            if changed else "Adopted file bytes match their recorded baseline hashes.")
+        add("adoption.source", "unverified",
+            "A source revision is recorded; this command does not verify its historical or remote provenance."
+            if manifest["source_revision"] else "The adoption source revision is unknown.")
     except (OSError, UnicodeError, ValueError):
         add("adoption", "fail", "Adoption record must contain supported schema, revision, and safe project-relative SHA256 file entries.")
 
