@@ -1,6 +1,5 @@
 {
   "schema_version": 1,
-  "workflow_version": "0.1.0",
   "integration_owner": "flowrat",
   "max_implementation_agents": 2,
   "implementation_delegation_authorized": true,

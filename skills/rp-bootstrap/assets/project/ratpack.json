@@ -1,6 +1,5 @@
 {
   "schema_version": 1,
-  "workflow_version": "0.1.0",
   "integration_owner": null,
   "max_implementation_agents": null,
   "implementation_delegation_authorized": false,
