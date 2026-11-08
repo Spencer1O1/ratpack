@@ -62,6 +62,13 @@ writer per overlapping area. Delegate useful implementation within the recorded
 authorization; if the host lacks subagents, give equivalent briefs to existing
 contributors and report the limitation.
 
+Keep role and merge assignments scoped to the target repository. When the human
+defines a new role, record its purpose, scope, outputs/evidence, and handoff in
+the project's `custom_roles` record before assignment. Use that brief within
+existing authorization; a new role name does not grant merge/spawn authority.
+Do not inject unrelated projects' agent identities or upstream planning into
+the project's working context.
+
 Keep Linear tasks and PR evidence current, including the exact reviewed commit.
 Route PRs to the independent reviewer and sole integration owner. Respect manual
 tracking while integrations are pending. Finish with a durable handoff; do not

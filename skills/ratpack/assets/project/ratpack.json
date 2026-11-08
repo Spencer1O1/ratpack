@@ -4,6 +4,7 @@
   "integration_owner": null,
   "max_implementation_agents": 2,
   "implementation_delegation_authorized": false,
+  "custom_roles": {},
   "checks": [],
   "github_repository": null,
   "linear_team": null

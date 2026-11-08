@@ -44,6 +44,11 @@ review subagents. Cleanup and workflow agents are used as needed. Separate
 human-directed conversations can fill the same roles; names do not grant
 authority. The workflow includes reusable briefs for all five roles.
 
+Roles are extensible: tell the coordinator to add a project-specific role such
+as research, with its scope and expected output. The coordinator records the
+brief in that project's `ratpack.json`. The same agent may hold different roles
+in different repositories; authority stays scoped to each repository.
+
 Linear tracks ownership and dependencies. GitHub holds code, PRs, checks, and
 releases. Project documentation owns requirements and technical decisions.
 Until app approvals or automation are ready, link PRs and update tasks manually.

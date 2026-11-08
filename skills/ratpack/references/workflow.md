@@ -14,6 +14,12 @@ docs own requirements and design decisions. Link rather than duplicate them.
 | Cleanup contributor | Find and fix maintainability problems through normal tasks and PRs |
 | Workflow maintainer | Maintain contributor guidance and tracker/repository coordination |
 
+Assignments and authority apply to a specific repository. The same conversation
+may coordinate one project and contribute to another; merge authority does not
+carry between them. Projects adopting Ratpack use their own assignment record
+and policy version. Their contributors do not need upstream Ratpack development
+context unless an adopted change affects their work.
+
 The coordinator delegates substantial implementation by default when authorized
 and supported by the host. Start with at most two workers; use fewer when tasks
 share a contract or there is no useful parallel work. The coordinator may also
@@ -68,6 +74,26 @@ define behavior; they are not automatically installed host-specific agent types.
   repository/tracker coordination. Return concise docs/configuration changes,
   what was actually verified, and outstanding setup. Reuse existing objects and
   preserve project conventions; do not change product scope or merge authority.
+
+### Project-specific roles
+
+The five roles above are defaults, not a closed list. The human may add, change,
+or retire a role at any time by telling the coordinator. Record its brief under
+`custom_roles` in the project's `ratpack.json`: purpose, allowed work, expected
+outputs/evidence, and handoff destination. A brief may link existing project
+guidance rather than duplicate it. Assignments still identify the actual owner.
+
+For example: "Add a research role to investigate Lean proof approaches. Return
+sources, candidate lemmas, and unresolved questions to the coordinator; do not
+edit implementation files." The coordinator records the role and assigns a
+bounded research task when useful. A role does not require a permanent agent.
+
+Custom roles follow the shared isolation, review, and handoff rules. Role
+creation alone grants neither spawning nor merge authority. A research role is
+read-only unless its assignment authorizes edits; implementation changes still
+go through independent review. Changing the sole integration owner requires
+the existing transfer procedure. If a role changes during active work, update
+its assignment and handoff before dispatching conflicting work.
 
 Record the current integration owner and delegation limit in `ratpack.json`.
 Names are labels; roles define responsibility, not an agent's entire scope.
