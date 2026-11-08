@@ -2,7 +2,6 @@
   "schema_version": 1,
   "integration_owner": "flowrat",
   "max_implementation_agents": 2,
-  "implementation_delegation_authorized": true,
   "custom_roles": {},
   "checks": [
     "python3 scripts/check.py",

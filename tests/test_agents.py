@@ -80,7 +80,7 @@ class AgentTest(unittest.TestCase):
             config_path = target / "ratpack.json"
             config = json.loads(config_path.read_text())
             self.assertEqual(config["integration_owner"], "human-created-coordinator")
-            self.assertFalse(config["implementation_delegation_authorized"])
+            self.assertIsNone(config["max_implementation_agents"])
             config["custom_roles"]["research"] = {"purpose": "Keep my research role"}
             config_path.write_text(json.dumps(config))
             before = {p: p.read_bytes() for p in target.rglob("*") if p.is_file()}

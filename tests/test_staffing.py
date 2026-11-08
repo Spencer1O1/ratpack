@@ -16,12 +16,12 @@ SPEC.loader.exec_module(MODULE)
 
 
 class StaffingTest(unittest.TestCase):
-    def validate(self, limit, authorized):
+    def validate(self, limit):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             config = dict(
                 schema_version=1, max_implementation_agents=limit,
-                implementation_delegation_authorized=authorized, checks=[],
+                checks=[],
             )
             for relative in ('ratpack.json', 'skills/rp-bootstrap/assets/project/ratpack.json'):
                 path = root / relative
@@ -31,11 +31,11 @@ class StaffingTest(unittest.TestCase):
                 MODULE.check()
 
     def test_unapproved_and_approved_counts_including_more_than_two(self):
-        for limit, authorized in ((None, False), (2, True), (8, True)):
-            with self.subTest(limit=limit, authorized=authorized):
-                self.validate(limit, authorized)
+        for limit in (None, 0, 2, 8):
+            with self.subTest(limit=limit):
+                self.validate(limit)
 
-    def test_invalid_counts_and_approval_without_count_are_rejected(self):
-        for limit, authorized in ((None, True), (0, True), (-1, False), (True, True), ('8', True)):
-            with self.subTest(limit=limit, authorized=authorized), self.assertRaises(SystemExit):
-                self.validate(limit, authorized)
+    def test_invalid_counts_are_rejected(self):
+        for limit in (-1, True, '8'):
+            with self.subTest(limit=limit), self.assertRaises(SystemExit):
+                self.validate(limit)

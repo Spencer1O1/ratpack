@@ -32,12 +32,8 @@ def check():
         if config["schema_version"] != 1:
             errors.append(f"{relative}: unsupported schema version")
         limit = config["max_implementation_agents"]
-        if limit is not None and (type(limit) is not int or limit < 1):
-            errors.append(f"{relative}: worker limit must be null or a positive integer")
-        if config["implementation_delegation_authorized"] is True and limit is None:
-            errors.append(f"{relative}: authorized implementation delegation needs an approved count")
-        if type(config["implementation_delegation_authorized"]) is not bool:
-            errors.append(f"{relative}: delegation authorization must be boolean")
+        if limit is not None and (type(limit) is not int or limit < 0):
+            errors.append(f"{relative}: worker limit must be null or a nonnegative integer")
         if not all(isinstance(c, str) and c for c in config["checks"]):
             errors.append(f"{relative}: checks must contain command strings")
     for path in (ROOT / "skills").glob("*/SKILL.md"):

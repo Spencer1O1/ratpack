@@ -37,7 +37,6 @@ class PortabilityTest(unittest.TestCase):
                     config['checks'] = [f'touch {marker}']
                     if mode != 'manual':
                         config['max_implementation_agents'] = 4
-                        config['implementation_delegation_authorized'] = mode == 'native'
                         config['github_repository'] = 'example/project'
                         config['linear_team'] = 'TEAM'
                     if mode != 'native':

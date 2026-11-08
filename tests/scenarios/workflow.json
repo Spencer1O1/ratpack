@@ -9,7 +9,6 @@
         "integration_owner": "coordinator",
         "current_agent": "coordinator",
         "approved_implementors": 2,
-        "delegation_authorized": true,
         "host_free_worker_slots": 1,
         "tasks": [
           {
@@ -66,7 +65,6 @@
       "request": "The user requests TASK-2 now. Decide whether it can start, whether to modify the owner checkout, and the next action. Return start_tasks (IDs), touch_owner_checkout (boolean), next_action (short action identifier).",
       "context": {
         "approved_implementors": 2,
-        "delegation_authorized": true,
         "tasks": [
           {
             "id": "TASK-1",
@@ -133,8 +131,7 @@
         "dependencies": [],
         "paths": "unowned",
         "approved_implementors": 3,
-        "active_implementors": 0,
-        "delegation_authorized": true
+        "active_implementors": 0
       },
       "expected": {
         "can_start": true,
@@ -164,8 +161,7 @@
         "approved_implementors": 3,
         "active_implementors": 1,
         "available_cleanup_peer": true,
-        "paths": "independent",
-        "delegation_authorized": true
+        "paths": "independent"
       },
       "expected": {
         "start_cleanup": true,
@@ -215,7 +211,6 @@
       "request": "How many new implementation subagents can start now? Return authorized_limit, active_implementors, new_starts (integers) and ask_again_for_existing_approval (boolean).",
       "context": {
         "approved_implementors": 6,
-        "delegation_authorized": true,
         "active_workers": [
           {
             "name": "impl-a",
@@ -234,8 +229,8 @@
         ],
         "host_free_worker_slots": 2,
         "ready_nonoverlapping_tasks": 5,
-        "support_spawn_authorization": "independent reviewer separately authorized",
-        "current_request": "dispatch eligible work"
+        "current_request": "dispatch eligible work",
+        "support_scope": "independent review of assigned task"
       },
       "expected": {
         "authorized_limit": 6,
@@ -374,6 +369,106 @@
         "preserve_constraint_in_design": true,
         "maintain_repo_backlog": false,
         "erase_historical_commits": false
+      }
+    },
+    {
+      "id": "bootstrap-missing-linear",
+      "request": "Use the bootstrap skill to set up this project. Return provide_connection_steps_now, include_mcp_add_and_login, use_other_workspace, claim_connection_verified (booleans), plus user_message (your actual short reply).",
+      "context": {
+        "project": "example",
+        "host": "Codex CLI supports HTTP MCP and OAuth",
+        "linear": "intended workspace exists but has no configured MCP server; other workspace tools are available",
+        "github": "already available",
+        "worker_count": null
+      },
+      "expected": {
+        "provide_connection_steps_now": true,
+        "include_mcp_add_and_login": true,
+        "use_other_workspace": false,
+        "claim_connection_verified": false
+      }
+    },
+    {
+      "id": "bootstrap-defer-staffing",
+      "request": "Bootstrap the project. Return ask_enable_delegation, ask_worker_count_now, spawn_implementors_now (booleans), plus user_message (a short description of staffing for this user).",
+      "context": {
+        "host": "subagents supported",
+        "work": "only workflow adoption; product implementation has no assignments yet",
+        "integration_owner": "this conversation explicitly assigned by user",
+        "approved_implementors": null,
+        "human_restrictions": null
+      },
+      "expected": {
+        "ask_enable_delegation": false,
+        "ask_worker_count_now": false,
+        "spawn_implementors_now": false
+      }
+    },
+    {
+      "id": "first-implementation-staffing",
+      "request": "Start implementation with the two independent tasks now Ready. Return propose_count_and_task_split, ask_enable_delegation, dispatch_before_count_approval, may_arrange_task_scoped_independent_review (booleans), plus user_message (the actual staffing question).",
+      "context": {
+        "workflow": "Ratpack adopted",
+        "host": "subagents supported; adequate slots",
+        "approved_implementors": null,
+        "human_restrictions": null,
+        "tasks": [
+          "CORE-1 portable core",
+          "ADAPTER-1 independent prototype"
+        ]
+      },
+      "expected": {
+        "propose_count_and_task_split": true,
+        "ask_enable_delegation": false,
+        "dispatch_before_count_approval": false,
+        "may_arrange_task_scoped_independent_review": true
+      }
+    },
+    {
+      "id": "single-account-bootstrap-review",
+      "request": "Recommend initial GitHub review protections. Return require_second_account_approval, require_independent_exact_head_review, require_passing_ci, claim_agent_can_approve_own_account_pr (booleans), plus user_message (a plain-language recommendation).",
+      "context": {
+        "github": "one account shared by author and all agents; no other approver available",
+        "existing_protections": "none; setup authorized",
+        "host": "independent reviewer available",
+        "work": "configure new repository"
+      },
+      "expected": {
+        "require_second_account_approval": false,
+        "require_independent_exact_head_review": true,
+        "require_passing_ci": true,
+        "claim_agent_can_approve_own_account_pr": false
+      }
+    },
+    {
+      "id": "bootstrap-handoff-location",
+      "request": "Finish local preparation while tracker access is pending. Return write_pending_status_to_contributor_docs, retain_durable_rules_in_repo, retain_handoff_in_conversation, claim_setup_complete (booleans).",
+      "context": {
+        "tracker": "not yet connected",
+        "checks": "local pass",
+        "remote_migration": "pending external approval",
+        "docs": "contributor workflow has no project status section"
+      },
+      "expected": {
+        "write_pending_status_to_contributor_docs": false,
+        "retain_durable_rules_in_repo": true,
+        "retain_handoff_in_conversation": true,
+        "claim_setup_complete": false
+      }
+    },
+    {
+      "id": "bootstrap-review-default",
+      "request": "Recommend GitHub protections for a newly adopted Ratpack repository. Return require_github_approval_click, require_independent_agent_review, coordinator_merges_after_review_and_ci (booleans), plus user_message (short recommendation).",
+      "context": {
+        "repo": "new with no existing approval policy",
+        "user": "adopt Ratpack; no request for GitHub approvals",
+        "accounts": "human has another GitHub account available",
+        "host": "independent review agents available"
+      },
+      "expected": {
+        "require_github_approval_click": false,
+        "require_independent_agent_review": true,
+        "coordinator_merges_after_review_and_ci": true
       }
     }
   ]
