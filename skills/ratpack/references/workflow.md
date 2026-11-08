@@ -14,11 +14,90 @@ docs own requirements and design decisions. Link rather than duplicate them.
 | Cleanup contributor | Find and fix maintainability problems through normal tasks and PRs |
 | Workflow maintainer | Maintain contributor guidance and tracker/repository coordination |
 
+Assignments and authority apply to a specific repository. The same conversation
+may coordinate one project and contribute to another; merge authority does not
+carry between them. Projects adopting Ratpack use their own assignment record
+and policy version. Their contributors do not need upstream Ratpack development
+context unless an adopted change affects their work.
+
 The coordinator delegates substantial implementation by default when authorized
 and supported by the host. Start with at most two workers; use fewer when tasks
 share a contract or there is no useful parallel work. The coordinator may also
 implement bounded work. Cleanup and workflow are optional supporting roles,
 not requirements to run five persistent agents on every project.
+
+### Agent hierarchy
+
+The default is one persistent coordinator as the main project conversation.
+When authorized, it spawns implementation and independent review subagents for
+bounded tasks, collects their handoffs, and retains integration responsibility.
+Cleanup and workflow agents are started only when useful. They can be subagents
+too; they do not each need a permanent conversation.
+
+A reviewer may share a coordinator with the implementer. Independence means a
+different agent or human evaluates the actual change; the implementer does not
+review its own work. Give reviewers the requirements, diff/commit, and evidence,
+not an instruction to rubber-stamp the implementer's conclusions.
+
+The human is not required to create separate agents for any role. They may
+create a separate conversation for any role at any time and tell the
+coordinator its assignment. The coordinator registers that contributor, agrees
+on ownership/handoffs, and avoids spawning duplicate work. Existing separate
+conversations or humans may fill any role; mixed setups are supported. Record
+the actual owner and handoff route rather than pretending a peer conversation
+is a child agent. Respect host capacity and user scope; the implementation
+limit is not permission for unlimited support agents. Non-coordinator agents
+do not recursively create agents unless explicitly delegated that authority.
+
+### Role briefs
+
+Every assignment states the issue/outcome, acceptance criteria, owned paths,
+dependencies/contracts, checks, and handoff destination. These portable briefs
+define behavior; they are not automatically installed host-specific agent types.
+
+- **Coordinator:** turn user goals into priorities and bounded tasks, assign
+  owners, settle dependencies, and dispatch useful work. Collect implementation
+  and independent review handoffs, check the latest revision/CI, and serialize
+  merges. Return integrated results, open decisions, and the next plan to the
+  user. Preserve human product and release authority.
+- **Implementation:** build the assigned behavior within its ownership boundary,
+  with applicable tests and docs. Return a commit/PR, acceptance results, exact
+  checks, and remaining gaps. Stop at review handoff; do not merge or expand the
+  task into unrelated work.
+- **Review:** inspect the identified PR head against acceptance criteria,
+  correctness, regressions, and test evidence. Return the reviewed commit and
+  actionable findings with severity, location, and reasoning, or an explicit
+  no-findings result plus checks and limitations. Keep optional cleanup separate;
+  do not modify the author's branch or merge. Return fixes to the implementer
+  and recheck affected changes when requested.
+- **Cleanup:** inspect a bounded area for readability, organization, duplication,
+  or technical debt. Return concrete, prioritized findings. Implement selected
+  fixes as small tasks/PRs within the assigned scope; broader redesign returns
+  to planning. Cleanup changes receive independent review like other changes.
+- **Workflow:** inspect contributor guidance, assignments, task states, and
+  repository/tracker coordination. Return concise docs/configuration changes,
+  what was actually verified, and outstanding setup. Reuse existing objects and
+  preserve project conventions; do not change product scope or merge authority.
+
+### Project-specific roles
+
+The five roles above are defaults, not a closed list. The human may add, change,
+or retire a role at any time by telling the coordinator. Record its brief under
+`custom_roles` in the project's `ratpack.json`: purpose, allowed work, expected
+outputs/evidence, and handoff destination. A brief may link existing project
+guidance rather than duplicate it. Assignments still identify the actual owner.
+
+For example: "Add a research role to investigate Lean proof approaches. Return
+sources, candidate lemmas, and unresolved questions to the coordinator; do not
+edit implementation files." The coordinator records the role and assigns a
+bounded research task when useful. A role does not require a permanent agent.
+
+Custom roles follow the shared isolation, review, and handoff rules. Role
+creation alone grants neither spawning nor merge authority. A research role is
+read-only unless its assignment authorizes edits; implementation changes still
+go through independent review. Changing the sole integration owner requires
+the existing transfer procedure. If a role changes during active work, update
+its assignment and handoff before dispatching conflicting work.
 
 Record the current integration owner and delegation limit in `ratpack.json`.
 Names are labels; roles define responsibility, not an agent's entire scope.
@@ -58,8 +137,7 @@ Merge prerequisites before dependents. Update owned branches by merging current
 `devel` or transplanting dependent commits; the final PR diff must contain only
 the intended change. Repeat affected checks and review after synchronization.
 
-Worker assignments include the issue, outcome, acceptance criteria, owned paths,
-dependencies/contracts, checks, reviewer, and handoff destination. Workers do not
+Implementation assignments also name the independent reviewer. Workers do not
 expand scope, spawn more workers, or merge without explicit delegation.
 
 At handoff record the branch/worktree, commit/PR, checks/results, open findings,

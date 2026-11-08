@@ -1,7 +1,7 @@
 # Ratpack
 
-A small workflow for building projects with humans, implementation agents,
-Linear, and GitHub. One coordinator plans and delegates, independent reviewers
+A small workflow for humans and agents building projects with Linear and
+GitHub. One coordinator plans and delegates, independent reviewers
 check the work, and one integration owner merges.
 
 **Feature branches → `devel` by squash merge → `main` by release merge.**
@@ -15,7 +15,9 @@ Point your coordinator at this repository:
 > https://github.com/Spencer1O1/ratpack and bootstrap Ratpack in this project.
 > Preserve existing instructions. You are the coordinator and integration owner.
 > You may spawn up to two implementation workers for bounded tasks in this
-> project. Use our existing GitHub repository and Linear team; ask only for
+> project, plus independent review and occasional cleanup/workflow agents as
+> useful within the host's capacity. Use our existing GitHub repository and
+> Linear team; ask only for
 > missing information you cannot discover. Releases still need my approval.
 
 For a local checkout, give the agent the absolute path to
@@ -36,6 +38,16 @@ Read the [shared workflow](skills/ratpack/references/workflow.md) for roles,
 delegation, branch policy, review, and handoffs. The project keeps its own
 `ratpack.json` assignment record and contributor guide; changes to this upstream
 repository do not silently change an existing project's policy.
+
+The default is one persistent coordinator spawning bounded implementation and
+review subagents. Cleanup and workflow agents are used as needed. Separate
+human-directed conversations can fill the same roles; names do not grant
+authority. The workflow includes reusable briefs for all five roles.
+
+Roles are extensible: tell the coordinator to add a project-specific role such
+as research, with its scope and expected output. The coordinator records the
+brief in that project's `ratpack.json`. The same agent may hold different roles
+in different repositories; authority stays scoped to each repository.
 
 Linear tracks ownership and dependencies. GitHub holds code, PRs, checks, and
 releases. Project documentation owns requirements and technical decisions.

@@ -19,10 +19,12 @@ project's names, account identifiers, requirements, or production settings.
    only for missing decisions you cannot discover. Do not assume a connection
    can edit every setting; record unavailable operations accurately.
 3. Agree on the integration owner and delegation scope from the user's request
-   and existing authorization. Starting a Ratpack does not silently grant
-   spawning, publishing, or release authority. If the user explicitly permits
-   implementation delegation, record the worker limit (default two) and use
-   bounded tasks; do not request the same permission again within that scope.
+   and existing authorization, including support/review agents. Starting a
+   Ratpack does not silently grant spawning, publishing, or release authority.
+   If the user explicitly permits delegation, record the implementation worker
+   limit (default two) and use bounded assignments from the workflow's role
+   briefs. Respect host capacity; do not request permission again within the
+   already authorized scope.
 4. Prepare `ratpack.json`, contributor/agent guidance, and a short PR template.
    The helper below previews or installs starter files only when they will not
    overwrite different content. With existing docs, reconcile manually into
@@ -52,10 +54,20 @@ docs describe the adopted workflow, not proof of configured services.
 
 Read the project's own instructions and assignment record; its adopted version
 and explicit user changes take precedence over newer upstream defaults. Plan
-atomic tasks before dispatching workers. Freeze shared contracts and assign one
+atomic tasks before dispatching workers. Use the shared workflow's hierarchy and
+role briefs: coordinator as the persistent root, implementation/review subagents,
+cleanup/workflow support as needed. Preserve existing peer conversations when
+they already fill these roles. Freeze shared contracts and assign one
 writer per overlapping area. Delegate useful implementation within the recorded
 authorization; if the host lacks subagents, give equivalent briefs to existing
 contributors and report the limitation.
+
+Keep role and merge assignments scoped to the target repository. When the human
+defines a new role, record its purpose, scope, outputs/evidence, and handoff in
+the project's `custom_roles` record before assignment. Use that brief within
+existing authorization; a new role name does not grant merge/spawn authority.
+Do not inject unrelated projects' agent identities or upstream planning into
+the project's working context.
 
 Keep Linear tasks and PR evidence current, including the exact reviewed commit.
 Route PRs to the independent reviewer and sole integration owner. Respect manual
