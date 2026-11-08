@@ -20,6 +20,55 @@ share a contract or there is no useful parallel work. The coordinator may also
 implement bounded work. Cleanup and workflow are optional supporting roles,
 not requirements to run five persistent agents on every project.
 
+### Agent hierarchy
+
+The default is one persistent coordinator as the main project conversation.
+When authorized, it spawns implementation and independent review subagents for
+bounded tasks, collects their handoffs, and retains integration responsibility.
+Cleanup and workflow agents are started only when useful. They can be subagents
+too; they do not each need a permanent conversation.
+
+A reviewer may share a coordinator with the implementer. Independence means a
+different agent or human evaluates the actual change; the implementer does not
+review its own work. Give reviewers the requirements, diff/commit, and evidence,
+not an instruction to rubber-stamp the implementer's conclusions.
+
+Existing separate conversations or humans may fill any role. Record the actual
+owner and handoff route rather than pretending a peer conversation is a child
+agent. Respect host capacity and user scope; the configured implementation
+limit is not permission for unlimited support agents. Non-coordinator agents
+do not recursively create agents unless explicitly delegated that authority.
+
+### Role briefs
+
+Every assignment states the issue/outcome, acceptance criteria, owned paths,
+dependencies/contracts, checks, and handoff destination. These portable briefs
+define behavior; they are not automatically installed host-specific agent types.
+
+- **Coordinator:** turn user goals into priorities and bounded tasks, assign
+  owners, settle dependencies, and dispatch useful work. Collect implementation
+  and independent review handoffs, check the latest revision/CI, and serialize
+  merges. Return integrated results, open decisions, and the next plan to the
+  user. Preserve human product and release authority.
+- **Implementation:** build the assigned behavior within its ownership boundary,
+  with applicable tests and docs. Return a commit/PR, acceptance results, exact
+  checks, and remaining gaps. Stop at review handoff; do not merge or expand the
+  task into unrelated work.
+- **Review:** inspect the identified PR head against acceptance criteria,
+  correctness, regressions, and test evidence. Return the reviewed commit and
+  actionable findings with severity, location, and reasoning, or an explicit
+  no-findings result plus checks and limitations. Keep optional cleanup separate;
+  do not modify the author's branch or merge. Return fixes to the implementer
+  and recheck affected changes when requested.
+- **Cleanup:** inspect a bounded area for readability, organization, duplication,
+  or technical debt. Return concrete, prioritized findings. Implement selected
+  fixes as small tasks/PRs within the assigned scope; broader redesign returns
+  to planning. Cleanup changes receive independent review like other changes.
+- **Workflow:** inspect contributor guidance, assignments, task states, and
+  repository/tracker coordination. Return concise docs/configuration changes,
+  what was actually verified, and outstanding setup. Reuse existing objects and
+  preserve project conventions; do not change product scope or merge authority.
+
 Record the current integration owner and delegation limit in `ratpack.json`.
 Names are labels; roles define responsibility, not an agent's entire scope.
 Independent review is required even for the coordinator's own changes. A
@@ -58,8 +107,7 @@ Merge prerequisites before dependents. Update owned branches by merging current
 `devel` or transplanting dependent commits; the final PR diff must contain only
 the intended change. Repeat affected checks and review after synchronization.
 
-Worker assignments include the issue, outcome, acceptance criteria, owned paths,
-dependencies/contracts, checks, reviewer, and handoff destination. Workers do not
+Implementation assignments also name the independent reviewer. Workers do not
 expand scope, spawn more workers, or merge without explicit delegation.
 
 At handoff record the branch/worktree, commit/PR, checks/results, open findings,
