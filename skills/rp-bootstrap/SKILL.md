@@ -38,3 +38,22 @@ python3 scripts/bootstrap.py /path/to/project --owner coordinator-name
 Run from this skill's directory with Python 3.11+. Add `--apply` to write.
 The helper does not change Git or accounts. Reconcile conflicts manually and
 fill configuration from the project's actual commands and identifiers.
+
+For an installed copy, pass `--source-revision <commit>` when the pinned source
+commit is known. Bootstrap records provenance and generated-file hashes in
+`ratpack.lock.json`; unknown provenance stays explicit. The lock is an adoption
+baseline, not task state or permission to overwrite project changes.
+
+Read-only checks from this skill's directory:
+
+```bash
+python3 scripts/doctor.py /path/to/project
+python3 scripts/upgrade.py /path/to/project --source-revision <commit>
+```
+
+Use `--json` for structured output. Doctor accepts `--workflow <relative-path>`
+for an existing owning document and `--native` to require native profiles. It
+does not run configured checks or verify remote integrations. Upgrade only
+previews changes against the recorded baseline; reconcile conflicts and preserve
+project configuration deliberately. Legacy projects without a baseline need
+manual adoption reconciliation.

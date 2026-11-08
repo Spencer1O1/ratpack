@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "resume-with-workers",
+      "request": "Resume coordination. Decide new implementation dispatch, required re-review, merges, and deferred tasks. Return dispatch_tasks, rereview_tasks, merge_prs, held_tasks as ID lists.",
+      "context": {
+        "host": "subagents",
+        "integration_owner": "coordinator",
+        "current_agent": "coordinator",
+        "approved_implementers": 2,
+        "delegation_authorized": true,
+        "host_free_worker_slots": 1,
+        "tasks": [
+          {
+            "id": "TASK-1",
+            "state": "In Progress",
+            "owner": "worker-a",
+            "worktree": "occupied",
+            "paths": [
+              "engine/"
+            ]
+          },
+          {
+            "id": "TASK-2",
+            "state": "In Review",
+            "pr": "PR-2",
+            "head": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "reviewed_head": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ci": "passed"
+          },
+          {
+            "id": "TASK-3",
+            "state": "Ready",
+            "paths": [
+              "ui/"
+            ],
+            "dependencies": []
+          },
+          {
+            "id": "TASK-4",
+            "state": "Backlog",
+            "request": "after current tickets",
+            "captured_blockers": [
+              "TASK-1",
+              "TASK-2"
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "dispatch_tasks": [
+          "TASK-3"
+        ],
+        "rereview_tasks": [
+          "TASK-2"
+        ],
+        "merge_prs": [],
+        "held_tasks": [
+          "TASK-4"
+        ]
+      }
+    },
+    {
+      "id": "occupied-checkout",
+      "request": "The user requests TASK-2 now. Decide whether it can start, whether to modify the owner checkout, and the next action. Return start_tasks (IDs), touch_owner_checkout (boolean), next_action (short action identifier).",
+      "context": {
+        "approved_implementers": 2,
+        "delegation_authorized": true,
+        "tasks": [
+          {
+            "id": "TASK-1",
+            "owner": "human-peer",
+            "state": "In Progress",
+            "paths": [
+              "shared/schema.py"
+            ],
+            "checkout": "dirty, occupied, not handed off"
+          },
+          {
+            "id": "TASK-2",
+            "state": "Ready",
+            "paths": [
+              "shared/schema.py"
+            ]
+          }
+        ],
+        "shared_interface_agreed": false
+      },
+      "expected": {
+        "start_tasks": [],
+        "touch_owner_checkout": false,
+        "next_action": "coordinate_handoff"
+      }
+    },
+    {
+      "id": "changed-review-head",
+      "request": "As integration owner, decide whether to merge PR-7 now. Return merge (boolean), rereview_required (boolean), required_review_head (SHA).",
+      "context": {
+        "host": "human-created peers",
+        "integration_owner": "coordinator",
+        "current_agent": "coordinator",
+        "pr": "PR-7",
+        "head": "cccccccccccccccccccccccccccccccccccccccc",
+        "reviewed_head": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "reviewer": "independent-peer",
+        "ci": "passed at current head",
+        "required_github_approvals": "satisfied",
+        "user_request": "merge when ready"
+      },
+      "expected": {
+        "merge": false,
+        "rereview_required": true,
+        "required_review_head": "cccccccccccccccccccccccccccccccccccccccc"
+      }
+    },
+    {
+      "id": "manual-tracking",
+      "request": "Begin the ready bounded task using available capabilities. Return can_start, use_existing_peer, spawn_new_agent, claim_linear_automation (booleans), tracking (manual or automatic).",
+      "context": {
+        "native_spawning": "unavailable",
+        "linear": "unavailable",
+        "github": "available",
+        "tracking_fallback": "GitHub issue #4 with scope, acceptance, ownership and dependencies",
+        "existing_peer": {
+          "name": "worker-peer",
+          "human_created": true,
+          "assignment": "TASK-4",
+          "available": true
+        },
+        "task": "TASK-4",
+        "task_state": "Ready",
+        "dependencies": [],
+        "paths": "unowned",
+        "approved_implementers": 3,
+        "active_implementers": 0,
+        "delegation_authorized": true
+      },
+      "expected": {
+        "can_start": true,
+        "use_existing_peer": true,
+        "spawn_new_agent": false,
+        "claim_linear_automation": false,
+        "tracking": "manual"
+      }
+    },
+    {
+      "id": "fixed-batch",
+      "request": "Assess the queued cleanup task now. Return start_cleanup (boolean) and blocker_ids (the IDs that define the requested batch).",
+      "context": {
+        "request": "cleanup after current tickets",
+        "cleanup": "TASK-3",
+        "captured_blockers": [
+          "TASK-1",
+          "TASK-2"
+        ],
+        "tasks": {
+          "TASK-1": "Done, accepted and merged",
+          "TASK-2": "Done, accepted and merged",
+          "TASK-3": "Backlog",
+          "TASK-4": "In Progress, created after snapshot"
+        },
+        "host": "peers",
+        "approved_implementers": 3,
+        "active_implementers": 1,
+        "available_cleanup_peer": true,
+        "paths": "independent",
+        "delegation_authorized": true
+      },
+      "expected": {
+        "start_cleanup": true,
+        "blocker_ids": [
+          "TASK-1",
+          "TASK-2"
+        ]
+      }
+    },
+    {
+      "id": "deferred-audit",
+      "request": "While waiting, decide whether to begin the audit or fixes for the queued cleanup. Return start_audit, start_fixes (booleans), task_state (status).",
+      "context": {
+        "task": "TASK-8",
+        "request": "audit and cleanup after TASK-7",
+        "blocker": "TASK-7 is In Review, not accepted/merged",
+        "current_state": "Backlog",
+        "new_user_override": null,
+        "coordinator_idea": "inspect early to prepare the fixes"
+      },
+      "expected": {
+        "start_audit": false,
+        "start_fixes": false,
+        "task_state": "Backlog"
+      }
+    },
+    {
+      "id": "transfer-owner",
+      "request": "User names coordinator-b as replacement integration owner. Decide whether b can merge immediately and what must be reconciled first. Return merge_now, confirm_old_owner_stopped, reconstruct_queue, update_authority_record (booleans).",
+      "context": {
+        "recorded_owner": "coordinator-a",
+        "new_owner": "coordinator-b",
+        "current_agent": "coordinator-b",
+        "old_owner": "unavailable, no confirmed stop or handoff",
+        "queue": "not reconstructed",
+        "pr": "review and CI passed"
+      },
+      "expected": {
+        "merge_now": false,
+        "confirm_old_owner_stopped": true,
+        "reconstruct_queue": true,
+        "update_authority_record": true
+      }
+    },
+    {
+      "id": "staffing-and-host-capacity",
+      "request": "How many new implementation subagents can start now? Return authorized_limit, active_implementers, new_starts (integers) and ask_again_for_existing_approval (boolean).",
+      "context": {
+        "approved_implementers": 6,
+        "delegation_authorized": true,
+        "active_workers": [
+          {
+            "name": "impl-a",
+            "work": "implementation"
+          },
+          {
+            "name": "impl-peer",
+            "work": "implementation",
+            "human_created": true
+          },
+          {
+            "name": "cleanup-peer",
+            "work": "repository edits",
+            "human_created": true
+          }
+        ],
+        "host_free_worker_slots": 2,
+        "ready_nonoverlapping_tasks": 5,
+        "support_spawn_authorization": "independent reviewer separately authorized",
+        "current_request": "dispatch eligible work"
+      },
+      "expected": {
+        "authorized_limit": 6,
+        "active_implementers": 3,
+        "new_starts": 2,
+        "ask_again_for_existing_approval": false
+      }
+    },
+    {
+      "id": "report-acceptance",
+      "request": "Set completion for each audit report. Return done_reports (IDs), awaiting_acceptance (IDs), require_code_pr (boolean).",
+      "context": {
+        "host": "manual tracking",
+        "reports": [
+          {
+            "id": "AUDIT-1",
+            "delivered": true,
+            "accepted_by_recipient": true,
+            "evidence_retained": true,
+            "code_changes": false
+          },
+          {
+            "id": "AUDIT-2",
+            "delivered": true,
+            "accepted_by_recipient": false,
+            "worker_returned_success": true,
+            "code_changes": false
+          }
+        ]
+      },
+      "expected": {
+        "done_reports": [
+          "AUDIT-1"
+        ],
+        "awaiting_acceptance": [
+          "AUDIT-2"
+        ],
+        "require_code_pr": false
+      }
+    }
+  ]
+}
