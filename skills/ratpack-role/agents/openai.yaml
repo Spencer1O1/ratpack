@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ratpack Role"
+  short_description: "Maintain custom roles and native agent profiles"
+  default_prompt: "Use $ratpack-role to create, update, or retire a custom role in this project."
