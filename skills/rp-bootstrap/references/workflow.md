@@ -40,7 +40,7 @@ There is no fixed worker count. The coordinator proposes a useful concurrent
 implementation count and task split; the human approves or chooses another.
 Record the approved count in `max_implementation_agents` and spawning permission
 in `implementation_delegation_authorized`. A null count is unapproved, not
-unlimited. Spawning implementers requires permission and a positive approved
+unlimited. Spawning implementors requires permission and a positive approved
 count. Reuse approval until changed; request an increase when useful and wait
 for an answer before exceeding existing authorization.
 
@@ -69,7 +69,7 @@ Record its purpose, allowed work, expected outputs/evidence, and handoff under
 A definition grants no new authority and does not require a permanent agent or
 another skill; use the role procedure when maintaining a native definition.
 
-Bootstrap supplies `ratpack_coordinator`, `ratpack_implementer`,
+Bootstrap supplies `ratpack_coordinator`, `ratpack_implementor`,
 `ratpack_reviewer`, `ratpack_cleanup`, and `ratpack_workflow` profiles in
 `.codex/agents/`. Profiles select these role briefs; skills provide procedures.
 Profiles inherit the parent's model, sandbox/approvals, and MCP access. Behavioral

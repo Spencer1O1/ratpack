@@ -16,7 +16,7 @@ ADOPTION = runpy.run_path(str(Path(__file__).with_name("adoption.py")))
 
 
 PROFILES = (
-    "ratpack_coordinator", "ratpack_implementer", "ratpack_reviewer",
+    "ratpack_coordinator", "ratpack_implementor", "ratpack_reviewer",
     "ratpack_cleanup", "ratpack_workflow",
 )
 
@@ -136,7 +136,7 @@ def check_profiles(root, native, add):
             found.add(profile["name"])
         missing = set(PROFILES) - found
         if native and missing:
-            add("profiles.files", "fail", "Native mode requires all five Ratpack profile names with valid fields.")
+            add("profiles.files", "fail", "Native mode is missing required profiles: " + ", ".join(sorted(missing)) + ". Preview adoption changes before reconciling profile names.")
         elif paths:
             add("profiles.files", "pass", "Present native profile files parse and have unique names and required strings.")
         else:

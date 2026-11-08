@@ -8,7 +8,7 @@ description: Independently review an identified Ratpack commit or PR against req
 Read the project's AGENTS.md, contributor workflow, assignment record, task
 acceptance criteria, and relevant requirements/design. Apply its independence,
 isolation, authority, and handoff rules; invoking this skill does not make the
-implementer an independent reviewer.
+implementor an independent reviewer.
 
 1. Establish the repository, base, exact proposed head SHA, task scope,
    dependencies, and review destination. Report missing identity or acceptance
@@ -22,7 +22,7 @@ implementer an independent reviewer.
 4. Return exact base/head, acceptance coverage, checks/limitations, and findings
    with severity, path/line, failing condition, consequence, and evidence—or an
    explicit no-findings result within the stated scope.
-5. Check whether the head advanced. Return findings to the implementer and
+5. Check whether the head advanced. Return findings to the implementor and
    identify remaining unreviewed changes; recheck affected behavior on request.
    Route the final report to the integration owner at the authorized destination.
 

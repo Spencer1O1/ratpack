@@ -8,7 +8,7 @@
         "host": "subagents",
         "integration_owner": "coordinator",
         "current_agent": "coordinator",
-        "approved_implementers": 2,
+        "approved_implementors": 2,
         "delegation_authorized": true,
         "host_free_worker_slots": 1,
         "tasks": [
@@ -65,7 +65,7 @@
       "id": "occupied-checkout",
       "request": "The user requests TASK-2 now. Decide whether it can start, whether to modify the owner checkout, and the next action. Return start_tasks (IDs), touch_owner_checkout (boolean), next_action (short action identifier).",
       "context": {
-        "approved_implementers": 2,
+        "approved_implementors": 2,
         "delegation_authorized": true,
         "tasks": [
           {
@@ -132,8 +132,8 @@
         "task_state": "Ready",
         "dependencies": [],
         "paths": "unowned",
-        "approved_implementers": 3,
-        "active_implementers": 0,
+        "approved_implementors": 3,
+        "active_implementors": 0,
         "delegation_authorized": true
       },
       "expected": {
@@ -161,8 +161,8 @@
           "TASK-4": "In Progress, created after snapshot"
         },
         "host": "peers",
-        "approved_implementers": 3,
-        "active_implementers": 1,
+        "approved_implementors": 3,
+        "active_implementors": 1,
         "available_cleanup_peer": true,
         "paths": "independent",
         "delegation_authorized": true
@@ -212,9 +212,9 @@
     },
     {
       "id": "staffing-and-host-capacity",
-      "request": "How many new implementation subagents can start now? Return authorized_limit, active_implementers, new_starts (integers) and ask_again_for_existing_approval (boolean).",
+      "request": "How many new implementation subagents can start now? Return authorized_limit, active_implementors, new_starts (integers) and ask_again_for_existing_approval (boolean).",
       "context": {
-        "approved_implementers": 6,
+        "approved_implementors": 6,
         "delegation_authorized": true,
         "active_workers": [
           {
@@ -239,7 +239,7 @@
       },
       "expected": {
         "authorized_limit": 6,
-        "active_implementers": 3,
+        "active_implementors": 3,
         "new_starts": 2,
         "ask_again_for_existing_approval": false
       }

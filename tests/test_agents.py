@@ -74,7 +74,7 @@ class AgentTest(unittest.TestCase):
                 self.assertTrue(all(isinstance(v, str) and v.strip() for v in data.values()))
                 names.add(data["name"])
             self.assertEqual(names, {
-                "ratpack_coordinator", "ratpack_implementer", "ratpack_reviewer",
+                "ratpack_coordinator", "ratpack_implementor", "ratpack_reviewer",
                 "ratpack_cleanup", "ratpack_workflow",
             })
             config_path = target / "ratpack.json"
