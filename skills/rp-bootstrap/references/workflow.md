@@ -7,13 +7,13 @@ workflow and explicit user decisions; upstream changes require deliberate adopti
 
 ## Roles and authority
 
-| Role | Responsibility and handoff |
-| --- | --- |
-| Coordinator | Plan product work, prioritize tasks, assign owners, resolve dependencies, and collect results |
-| Implementation | Build one assigned change with tests/docs; hand off a commit or PR and validation |
-| Independent review | Evaluate the exact proposed revision; return actionable findings or no findings, with checks and limitations |
-| Cleanup | Audit a bounded area for maintainability problems; report findings or implement scoped fixes |
-| Workflow | Maintain contributor guidance and tracker/repository setup; report changes, verified behavior, and setup gaps |
+| Role | General agent name | Responsibility and handoff |
+| --- | --- | --- |
+| Coordinator | `crd-rat` | Plan product work, prioritize tasks, assign owners, resolve dependencies, and collect results |
+| Implementation | `imp-rat` | Build one assigned change with tests/docs; hand off a commit or PR and validation |
+| Independent review | `rev-rat` | Evaluate the exact proposed revision; return actionable findings or no findings, with checks and limitations |
+| Cleanup | `cln-rat` | Audit a bounded area for maintainability problems; report findings or implement scoped fixes |
+| Workflow | `wfl-rat` | Maintain contributor guidance and tracker/repository setup; report changes, verified behavior, and setup gaps |
 
 The coordinator is the persistent project conversation by default. It delegates
 substantial implementation when authorized and supported, and may implement
@@ -54,12 +54,12 @@ owner and handoff route, have it read the project instructions and role brief,
 and avoid duplicate assignments. Peers remain human-accessible; they need not
 become subagents. Humans do not need agent session bookkeeping.
 
-Use short role names for general agents, such as `cleanup` or `review` (or the
-project's chosen names, such as `clean-rat` and `review-rat`). Reuse suitable general
-agents across assignments. Add a task qualifier only when it distinguishes
-concurrent or specialized workers, such as `impl-rat-storage`. Adapt punctuation
-to host constraints, for example `clean_rat` when internal names require
-underscores. Each assignment still has its own bounded brief and ownership record.
+Use the role table's general names for reusable agents; projects may choose
+other names. Reuse suitable general agents across assignments. Add a task suffix
+only when it distinguishes concurrent or specialized workers, such as
+`imp-rat-storage`. Adapt punctuation to host constraints: `imp_rat_storage` when
+internal names require underscores. Each assignment still has its own bounded
+brief and ownership record.
 
 ### Custom roles and native profiles
 
