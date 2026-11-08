@@ -12,7 +12,9 @@ and resolve it before dispatch; do not install or upgrade policy as a side effec
 
 1. Reconcile tracker tasks, active contributors, worktrees, PRs, and current CI.
    Resolve stale ownership and dependencies against their authoritative records.
-2. Turn the requested outcome into bounded tasks. Apply the project's staffing
+2. Establish accepted product scope from human instructions/decisions; separate
+   agent proposals before assigning work under the workflow's planning rules.
+   Turn the agreed outcome into bounded tasks. Apply the project's staffing
    and ordering rules, record decisions, and assign eligible work with clear
    ownership, interfaces, acceptance evidence, and handoff routes. Select and
    apply task-appropriate model/effort using [dispatch guidance](references/model-routing.md);
