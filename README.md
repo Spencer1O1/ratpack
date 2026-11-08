@@ -9,7 +9,7 @@ promote `devel` to `main`.
 
 Give your agent this request:
 
-> Use `skills/rp-bootstrap/SKILL.md` from https://github.com/Spencer1O1/ratpack
+> Use `skills/rp-bootstrap/SKILL.md` from https://github.com/ratpack-workflow/ratpack
 > to set up Ratpack in this project.
 
 If the skills are already installed, use `$rp-bootstrap` for setup and

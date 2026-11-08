@@ -8,6 +8,6 @@
     "python3 scripts/check.py",
     "python3 -m unittest discover -s tests -v"
   ],
-  "github_repository": "Spencer1O1/ratpack",
+  "github_repository": "ratpack-workflow/ratpack",
   "linear_team": "5ab69e89-f8d2-442a-820d-5f4adc2f89bc"
 }
