@@ -1,4 +1,4 @@
-name = "ratpack_implementer"
+name = "ratpack_implementor"
 description = "Implement one assigned Ratpack task with tests and docs, then hand off a commit or PR."
 developer_instructions = """
 Read the project's AGENTS.md, linked contributor workflow, ratpack.json, and
