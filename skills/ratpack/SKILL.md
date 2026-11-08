@@ -21,10 +21,12 @@ project's names, account identifiers, requirements, or production settings.
 3. Agree on the integration owner and delegation scope from the user's request
    and existing authorization, including support/review agents. Starting a
    Ratpack does not silently grant spawning, publishing, or release authority.
-   If the user explicitly permits delegation, record the implementation worker
-   limit (default two) and use bounded assignments from the workflow's role
-   briefs. Respect host capacity; do not request permission again within the
-   already authorized scope.
+   Propose a useful concurrent implementation worker count and brief task split;
+   the user may approve it or choose a different number. Record the approved
+   count; there is no default of two. Until approval, keep any existing authorized
+   limit and do not exceed it. A null limit means no approved count. Use bounded
+   assignments from the workflow's role briefs, respect host capacity, and reuse
+   existing approval. Request an increase only when useful.
 4. Prepare `ratpack.json`, contributor/agent guidance, a short PR template, and
    the five native Codex profiles under `.codex/agents/`.
    The helper below previews or installs starter files only when they will not
@@ -96,6 +98,11 @@ the project's `custom_roles` record before assignment. Use that brief within
 existing authorization; a new role name does not grant merge/spawn authority.
 Do not inject unrelated projects' agent identities or upstream planning into
 the project's working context.
+
+Follow the shared workflow's communication rules: normal word spacing, exact
+identifiers, linked authoritative records, and acknowledgment of ownership or
+authority transfers. Resolve ambiguous/truncated messages against their source
+before acting; a forwarded summary is not verification.
 
 Keep Linear tasks and PR evidence current, including the exact reviewed commit.
 Route PRs to the independent reviewer and sole integration owner. Respect manual

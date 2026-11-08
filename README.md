@@ -14,9 +14,9 @@ Point your coordinator at this repository:
 > Read the Ratpack skill at `skills/ratpack/SKILL.md` in
 > https://github.com/Spencer1O1/ratpack and bootstrap Ratpack in this project.
 > Preserve existing instructions. You are the coordinator and integration owner.
-> You may spawn up to two implementation workers for bounded tasks in this
-> project, plus independent review and occasional cleanup/workflow agents as
-> useful within the host's capacity. Use our existing GitHub repository and
+> Propose how many concurrent implementation workers would help and why; I will
+> approve that number or choose another. You may use independent review and
+> occasional cleanup/workflow agents within the host's capacity. Use our existing GitHub repository and
 > Linear team; ask only for
 > missing information you cannot discover. Releases still need my approval.
 
@@ -45,7 +45,10 @@ repository do not silently change an existing project's policy.
 The default is one persistent coordinator spawning bounded implementation and
 review subagents. Cleanup and workflow agents are used as needed. Separate
 human-directed conversations can fill the same roles; names do not grant
-authority. The workflow includes reusable briefs for all five roles.
+authority. The workflow includes reusable briefs for all five roles. There is
+no fixed implementation-agent count: the coordinator proposes a count, the
+human approves or adjusts it, and that approval remains valid until changed.
+Host capacity may restrict how many can actually run at once.
 
 Bootstrap installs five native Codex definitions in the target project's
 `.codex/agents/`: `ratpack_coordinator`, `ratpack_implementer`,

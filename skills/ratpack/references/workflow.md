@@ -21,9 +21,16 @@ and policy version. Their contributors do not need upstream Ratpack development
 context unless an adopted change affects their work.
 
 The coordinator delegates substantial implementation by default when authorized
-and supported by the host. Start with at most two workers; use fewer when tasks
-share a contract or there is no useful parallel work. The coordinator may also
-implement bounded work. Cleanup and workflow are optional supporting roles,
+and supported by the host. There is no fixed Ratpack worker count. The coordinator
+proposes as many concurrent implementation workers as useful, with a brief task
+split and reason. The human may approve that count or choose a different one;
+wait for an answer before dispatching beyond existing authorization. Record the
+approved concurrent limit in `ratpack.json`. Reuse that approval until the human
+changes it; request an increase when useful rather than asking for every spawn.
+Use fewer workers when tasks overlap or there is no useful parallel work, and
+respect the host's actual capacity even if the approved count is higher.
+Human-created implementation peers count toward the same limit. The coordinator
+may also implement bounded work. Cleanup and workflow are optional supporting roles,
 not requirements to run five persistent agents on every project.
 
 ### Agent hierarchy
@@ -127,7 +134,13 @@ Read-only reviewer instructions are behavioral rules, not a separate read-only
 sandbox. Keep permission boundaries explicit in the hosting session. Another
 host can use the same role briefs without claiming Codex-native discovery.
 
-Record the current integration owner and delegation limit in `ratpack.json`.
+Record the current integration owner and approved concurrent worker limit in
+`ratpack.json`. `max_implementation_agents: null` means no count has been
+approved, not unlimited capacity. Spawning implementation workers requires both
+`implementation_delegation_authorized: true` and a positive approved count.
+Existing numeric limits remain valid; this policy does not silently increase
+a project's authorization. Support/review spawning still needs its own agreed
+scope and available host capacity.
 Names are labels; roles define responsibility, not an agent's entire scope.
 Independent review is required even for the coordinator's own changes. A
 different human or agent reviews; the implementer cannot approve its own work.
@@ -172,6 +185,25 @@ At handoff record the branch/worktree, commit/PR, checks/results, open findings,
 blocker, and next owner/action. Keep unfinished worktrees until handed off.
 Session identifiers belong in task notes when needed for agent coordination;
 human contributors do not need session bookkeeping.
+
+## Agent communication
+
+Write messages in ordinary readable language, with normal spaces and line
+breaks. Do not concatenate words or compress prose into shorthand to save
+tokens. Keep identifiers, paths, commands, and quoted evidence exact; do not
+normalize their internal whitespace.
+
+Messages coordinate work; tasks, PRs, commits, and repository documents retain
+the authoritative state. Link those records rather than repeatedly paraphrasing
+requirements or forwarding an entire conversation. A handoff names the task,
+exact commit/PR, checks and limitations, and next owner/action. Distinguish a
+request, an acknowledgment, and verified completion.
+
+For a transfer of ownership or authority, the recipient acknowledges the scope
+and next action before conflicting work begins. If a message looks truncated,
+ambiguous, or inconsistent with its source, read the linked record or ask the
+sender before acting on the disputed detail. Do not treat an unacknowledged
+message as an accepted handoff or a summary as proof that checks passed.
 
 ## Requests and ordering
 
