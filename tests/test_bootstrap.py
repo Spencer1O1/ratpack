@@ -35,7 +35,7 @@ class BootstrapTest(unittest.TestCase):
         self.run_bootstrap(apply=True)
         config = json.loads((self.target / "ratpack.json").read_text())
         self.assertEqual(config["integration_owner"], "coordinator")
-        self.assertFalse(config["implementation_delegation_authorized"])
+        self.assertNotIn("implementation_delegation_authorized", config)
         self.assertIsNone(config["max_implementation_agents"])
         for path in self.target.rglob("*.md"):
             for link in re.findall(r"\]\(([^)]+)\)", path.read_text()):

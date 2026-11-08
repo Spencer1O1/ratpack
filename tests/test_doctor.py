@@ -29,7 +29,7 @@ class DoctorTest(unittest.TestCase):
             path.write_text("Project guidance\n")
         self.config = dict(
             schema_version=1, integration_owner="human coordinator",
-            max_implementation_agents=None, implementation_delegation_authorized=False,
+            max_implementation_agents=None,
             custom_roles={"research": "Investigate proofs"}, checks=[],
             github_repository=None, linear_team=None,
         )
@@ -82,7 +82,6 @@ class DoctorTest(unittest.TestCase):
     def test_configured_commands_are_not_executed_or_integrations_certified(self):
         marker = self.project / "executed"
         self.config.update(checks=[f"touch {marker}"], max_implementation_agents=8,
-                           implementation_delegation_authorized=True,
                            github_repository="example/project", linear_team="TEAM")
         self.write_config()
         before = self.snapshot()
@@ -94,12 +93,21 @@ class DoctorTest(unittest.TestCase):
                     "integration.protections", "profiles.runtime"):
             self.assertEqual(checks[key]["status"], "unverified")
 
+    def test_explicit_zero_and_retired_flag_preserve_read_only_compatibility(self):
+        self.config.update(max_implementation_agents=0,
+                           implementation_delegation_authorized=False)
+        self.write_config()
+        before = self.snapshot()
+        report, checks = self.result()
+        self.assertTrue(report["ok"])
+        self.assertEqual(checks["configuration.staffing"]["status"], "pass")
+        self.assertEqual(checks["configuration.legacy_delegation"]["status"], "warn")
+        self.assertEqual(before, self.snapshot())
+
     def test_invalid_configuration_is_reported_without_traceback(self):
         cases = (
             dict(schema_version=True), dict(integration_owner=" "),
-            dict(max_implementation_agents=True), dict(max_implementation_agents=0),
-            dict(implementation_delegation_authorized="yes"),
-            dict(implementation_delegation_authorized=True, max_implementation_agents=None),
+            dict(max_implementation_agents=True), dict(max_implementation_agents=-1),
             dict(checks="make test"), dict(checks=[""]), dict(custom_roles=[]),
             dict(custom_roles={"research": False}), dict(github_repository=[]),
         )
@@ -118,7 +126,7 @@ class DoctorTest(unittest.TestCase):
                 self.assertEqual(checks["configuration"]["status"], "fail")
 
     def test_missing_fields_and_missing_project_files_fail(self):
-        for key in ("schema_version", "max_implementation_agents", "implementation_delegation_authorized"):
+        for key in ("schema_version", "max_implementation_agents"):
             with self.subTest(key=key):
                 config = self.config.copy()
                 config.pop(key)

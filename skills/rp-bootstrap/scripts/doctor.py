@@ -56,14 +56,17 @@ def check_configuration(root, add):
             "Integration owner is recorded." if isinstance(owner, str) and owner.strip()
             else "Record a nonempty integration_owner before integration.")
         count = config.get("max_implementation_agents")
-        allowed = config.get("implementation_delegation_authorized")
-        count_valid = "max_implementation_agents" in config and (count is None or type(count) is int and count > 0)
-        if not count_valid or type(allowed) is not bool or allowed and count is None:
-            add("configuration.staffing", "fail", "Use a positive integer or null worker count and boolean delegation; authorized spawning requires a count.")
-        elif not allowed:
-            add("configuration.staffing", "warn", "Implementation spawning is not authorized; existing peers/manual work remain possible.")
+        count_valid = "max_implementation_agents" in config and (count is None or type(count) is int and count >= 0)
+        if not count_valid:
+            add("configuration.staffing", "fail", "Use a nonnegative integer or null implementation worker count.")
+        elif count is None:
+            add("configuration.staffing", "warn", "Propose an implementor count when implementation is ready to start.")
+        elif count == 0:
+            add("configuration.staffing", "pass", "No implementation helpers are requested; independent review remains part of the workflow.")
         else:
-            add("configuration.staffing", "pass", "An implementation worker limit and spawning permission are recorded; human approval was not independently verified.")
+            add("configuration.staffing", "pass", "An implementation worker limit is recorded; human approval was not independently verified.")
+        if "implementation_delegation_authorized" in config:
+            add("configuration.legacy_delegation", "warn", "Retired delegation flag found; reconcile with explicit human instructions when adopting the current workflow.")
         commands = config.get("checks")
         if not isinstance(commands, list) or any(not isinstance(c, str) or not c.strip() for c in commands):
             add("configuration.checks", "fail", "checks must be a list of nonempty command strings.")

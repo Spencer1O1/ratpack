@@ -15,10 +15,11 @@ workflow and explicit user decisions; upstream changes require deliberate adopti
 | Cleanup | `cln-rat` | Audit a bounded area for maintainability problems; report findings or implement scoped fixes |
 | Workflow | `wfl-rat` | Maintain contributor guidance and tracker/repository setup; report changes, verified behavior, and setup gaps |
 
-The coordinator is the persistent project conversation by default. It delegates
-substantial implementation when authorized and supported, and may implement
-bounded work itself. Cleanup and workflow are optional support, not permanent
-staffing requirements. Every assignment names the outcome, acceptance criteria,
+The coordinator is the persistent project conversation by default. Adopting
+Ratpack authorizes it to create and manage task-scoped helpers, including
+independent reviewers, where the host supports them. It delegates substantial
+implementation and may implement bounded work itself. Cleanup and workflow are
+optional support, not permanent staffing requirements. Every assignment names the outcome, acceptance criteria,
 owned paths, dependencies/contracts, checks, and handoff destination.
 
 Only the integration owner recorded in `ratpack.json` merges PRs, one at a time.
@@ -36,18 +37,25 @@ spawning; additional spawning authority must be explicitly delegated.
 
 ### Staffing and contributors
 
-There is no fixed worker count. The coordinator proposes a useful concurrent
-implementation count and task split; the human approves or chooses another.
-Record the approved count in `max_implementation_agents` and spawning permission
-in `implementation_delegation_authorized`. A null count is unapproved, not
-unlimited. Spawning implementors requires permission and a positive approved
-count. Reuse approval until changed; request an increase when useful and wait
-for an answer before exceeding existing authorization.
+There is no separate delegation enable/disable step. At bootstrap, leave
+`max_implementation_agents` null unless the human already chose a count. When
+implementation is ready to start, the coordinator proposes a useful concurrent
+implementor count and concrete task split; the human approves or chooses another.
+Record that count in `max_implementation_agents`. Null means the count has not
+been chosen; zero records an explicit choice to work without implementation
+helpers. Do not dispatch implementors before a positive count is approved.
+Reuse approval until changed; suggest an increase when growing implementation
+work justifies it, and wait before exceeding the approved count.
 
 Use fewer workers for overlapping tasks and respect actual host capacity.
 Human-created implementation peers and cleanup/custom roles that edit repository
-content consume the same worker capacity. Review/support spawning requires its
-own agreed scope; the implementation limit does not authorize unlimited support.
+content consume the same worker capacity. Independent review and other support
+helpers are part of the adopted workflow, scoped to actual tasks and host
+capacity; they do not require a separate enablement question. Honor explicit
+human restrictions on helpers and preserve existing staffing decisions during
+adoption upgrades. The retired `implementation_delegation_authorized` field is
+not used by this workflow; reconcile it against the human's actual instructions
+before removing it from an older project's configuration.
 
 The human may create a separate conversation for any role. Register its actual
 owner and handoff route, have it read the project instructions and role brief,
@@ -209,9 +217,13 @@ owner verifies evidence, merges the release PR, and tags its `main` commit.
 Merge `main` back into `devel` after release. Track release completion separately
 from implementation; temporary release branches may stabilize a release.
 
-Protect both branches with required PR review and CI where available; prohibit
-direct/force pushes. Disclose unavailable protections and apply the checklist
-manually; visibility/billing changes need user approval. A branch is not proof
+Protect both branches with PRs and CI where available; prohibit direct/force
+pushes. Set required GitHub approving-review counts to match available reviewers:
+a GitHub approval needs a different account from the PR author. If agents share
+one account, retain independent exact-revision review evidence and required CI
+without an unsatisfiable GitHub approval count. Preserve existing protections;
+relaxing them requires explicit human approval. Disclose unavailable protections
+and apply the checklist manually; visibility/billing changes need user approval. A branch is not proof
 of deployment or product readiness.
 
 For a new repository, a reviewed baseline may initialize `main` and `devel` at
