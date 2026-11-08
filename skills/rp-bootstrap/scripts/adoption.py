@@ -9,7 +9,7 @@ import subprocess
 
 
 LOCK = "ratpack.lock.json"
-UPSTREAM = "https://github.com/Spencer1O1/ratpack"
+UPSTREAM = "https://github.com/ratpack-workflow/ratpack"
 REVISION = re.compile(r"[0-9a-fA-F]{40}\Z")
 DIGEST = re.compile(r"[0-9a-f]{64}\Z")
 

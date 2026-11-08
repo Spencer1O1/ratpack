@@ -66,7 +66,7 @@ class DoctorTest(unittest.TestCase):
             files = {"docs/development.md": hashlib.sha256(
                 (self.project / "docs/development.md").read_bytes()).hexdigest()}
         data = dict(schema_version=1, source_revision=revision, files=files,
-                    upstream_repository="https://github.com/Spencer1O1/ratpack",
+                    upstream_repository="https://github.com/ratpack-workflow/ratpack",
                     source_revision_origin="git-verified" if revision else "unknown")
         (self.project / "ratpack.lock.json").write_text(json.dumps(data))
 
