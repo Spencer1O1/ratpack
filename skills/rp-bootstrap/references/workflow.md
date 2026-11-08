@@ -55,10 +55,11 @@ and avoid duplicate assignments. Peers remain human-accessible; they need not
 become subagents. Humans do not need agent session bookkeeping.
 
 Use short role names for general agents, such as `cleanup` or `review` (or the
-project's chosen names, such as `cleanrat` and `reviewrat`). Reuse suitable general
+project's chosen names, such as `clean-rat` and `review-rat`). Reuse suitable general
 agents across assignments. Add a task qualifier only when it distinguishes
-concurrent or specialized workers, such as `implrat_storage`. Each assignment
-still has its own bounded brief and ownership record.
+concurrent or specialized workers, such as `impl-rat-storage`. Adapt punctuation
+to host constraints, for example `clean_rat` when internal names require
+underscores. Each assignment still has its own bounded brief and ownership record.
 
 ### Custom roles and native profiles
 
