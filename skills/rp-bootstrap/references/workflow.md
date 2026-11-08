@@ -115,8 +115,22 @@ Capture actual requests as bounded tracker tasks for every role, including
 audits, research, docs, and custom work; hypothetical discussion creates none.
 Record relative requests as explicit start conditions in the task.
 
+Use conversation and project context to identify the owning project. Update an
+existing task for a clarification or related scope; capture independent work
+as a new or existing task in that project's queue. Resolve genuine project
+ambiguity before tracker writes or dispatch. Route work outside your project or
+assigned role to the appropriate coordinator without taking over its authority.
+
+An unscheduled request is capture and triage, not implicit cancellation or
+preemption. Continue active assignments; schedule new work through existing
+priorities, prerequisites, and capacity. Clarifications needed to finish the
+current task belong on that task. Reprioritize when the human clearly requests
+it, coordinating a safe handoff where needed. Acknowledge the captured task and
+next action; creating a ticket is not dispatch or completion.
+
 | Request | Start condition |
 | --- | --- |
+| No timing specified | Capture/update the project task and schedule within existing priorities, dependencies, and capacity |
 | Now | Next eligible opportunity within authority, ownership, dependencies, and capacity |
 | Next / when free | Next suitable slot with prerequisites intact |
 | After named tasks | Those exact IDs and their accepted deliverables |
