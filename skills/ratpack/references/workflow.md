@@ -39,9 +39,13 @@ different agent or human evaluates the actual change; the implementer does not
 review its own work. Give reviewers the requirements, diff/commit, and evidence,
 not an instruction to rubber-stamp the implementer's conclusions.
 
-Existing separate conversations or humans may fill any role. Record the actual
-owner and handoff route rather than pretending a peer conversation is a child
-agent. Respect host capacity and user scope; the configured implementation
+The human is not required to create separate agents for any role. They may
+create a separate conversation for any role at any time and tell the
+coordinator its assignment. The coordinator registers that contributor, agrees
+on ownership/handoffs, and avoids spawning duplicate work. Existing separate
+conversations or humans may fill any role; mixed setups are supported. Record
+the actual owner and handoff route rather than pretending a peer conversation
+is a child agent. Respect host capacity and user scope; the implementation
 limit is not permission for unlimited support agents. Non-coordinator agents
 do not recursively create agents unless explicitly delegated that authority.
 
