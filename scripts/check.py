@@ -4,6 +4,7 @@
 import json
 from pathlib import Path
 import re
+import tomllib
 from urllib.parse import unquote
 
 
@@ -37,9 +38,18 @@ def check():
             errors.append(f"{relative}: delegation authorization must be boolean")
         if not all(isinstance(c, str) and c for c in config["checks"]):
             errors.append(f"{relative}: checks must contain command strings")
-    skill = (ROOT / "skills/ratpack/SKILL.md").read_text()
-    if not skill.startswith("---\nname: ratpack\ndescription:"):
-        errors.append("Skill frontmatter missing name/description")
+    for path in (ROOT / "skills").glob("*/SKILL.md"):
+        if not path.read_text().startswith(f"---\nname: {path.parent.name}\ndescription:"):
+            errors.append(f"{path}: skill frontmatter missing name/description")
+    assets = ROOT / "skills/ratpack/assets/project/.codex/agents"
+    for path in assets.glob("*.toml"):
+        profile = tomllib.loads(path.read_text())
+        fields = ("name", "description", "developer_instructions")
+        if not all(isinstance(profile.get(k), str) and profile[k].strip() for k in fields):
+            errors.append(f"{path}: native profile missing required strings")
+        local = ROOT / ".codex/agents" / path.name
+        if not local.exists() or local.read_bytes() != path.read_bytes():
+            errors.append(f"{local}: differs from packaged native profile")
     if errors:
         raise SystemExit("\n".join(errors))
     print("Packaged resources, local links, and configuration checks pass")

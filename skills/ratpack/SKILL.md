@@ -25,11 +25,14 @@ project's names, account identifiers, requirements, or production settings.
    limit (default two) and use bounded assignments from the workflow's role
    briefs. Respect host capacity; do not request permission again within the
    already authorized scope.
-4. Prepare `ratpack.json`, contributor/agent guidance, and a short PR template.
+4. Prepare `ratpack.json`, contributor/agent guidance, a short PR template, and
+   the five native Codex profiles under `.codex/agents/`.
    The helper below previews or installs starter files only when they will not
    overwrite different content. With existing docs, reconcile manually into
    their owning files and retain one canonical workflow. Do not replace a
-   project's entire AGENTS.md or create a competing contributor guide.
+   project's entire AGENTS.md or create a competing contributor guide. Existing
+   native profiles also require deliberate reconciliation; never overwrite them
+   merely to adopt Ratpack.
 5. Require `devel` for integration and `main` for releases. Prepare any necessary
    migration without rewriting history. New repository initialization and
    external writes follow the user's actual authorization. Configure default
@@ -45,10 +48,20 @@ From this skill's directory, preview starter files in an existing project:
 python3 scripts/bootstrap.py /path/to/project --owner coordinator-name
 ```
 
-Add `--apply` to write the previewed files. Python 3.10+ is required. The helper
+Add `--apply` to write the previewed files. Python 3.11+ is required. The helper
 does not change Git state or accounts. Complete `checks` and connection fields
 in `ratpack.json` using the project's actual commands and identifiers. Generated
 docs describe the adopted workflow, not proof of configured services.
+
+Codex discovers the profiles in a trusted project. Use a fresh/reloaded session
+and verify available native agent names before claiming runtime activation;
+TOML parsing alone is not evidence of discovery or successful spawning. Profiles
+inherit the parent's model, sandbox/approval settings, and MCP access. Do not
+silently change global trust, permissions, or model settings to activate them.
+
+Human-created conversations remain valid. Have a peer explicitly read the same
+role file and project instructions for its assignment; naming the conversation
+does not activate a native profile or confer merge authority.
 
 ## Coordinate an existing Ratpack
 

@@ -52,8 +52,8 @@ do not recursively create agents unless explicitly delegated that authority.
 ### Role briefs
 
 Every assignment states the issue/outcome, acceptance criteria, owned paths,
-dependencies/contracts, checks, and handoff destination. These portable briefs
-define behavior; they are not automatically installed host-specific agent types.
+dependencies/contracts, checks, and handoff destination. These briefs define
+behavior. Bootstrap also installs the native Codex types described below.
 
 - **Coordinator:** turn user goals into priorities and bounded tasks, assign
   owners, settle dependencies, and dispatch useful work. Collect implementation
@@ -98,6 +98,34 @@ read-only unless its assignment authorizes edits; implementation changes still
 go through independent review. Changing the sole integration owner requires
 the existing transfer procedure. If a role changes during active work, update
 its assignment and handoff before dispatching conflicting work.
+
+### Native Codex types and peer conversations
+
+Bootstrap supplies `.codex/agents/ratpack_coordinator.toml`,
+`ratpack_implementer.toml`, `ratpack_reviewer.toml`, `ratpack_cleanup.toml`, and
+`ratpack_workflow.toml`. Each defines a native name, selection description, and
+developer instructions. A trusted, fresh/reloaded Codex session can discover
+these types for spawning. Verify discovery rather than assuming new files have
+changed an already-open session's tools. The coordinator remains the main
+conversation by default; spawning a coordinator type does not make that child
+the project's integration owner.
+
+Use the role skill to create/update/retire a custom brief and corresponding
+native profile, and the review skill for the repeatable independent-review
+procedure. A profile defines the agent's role; a skill defines a procedure it
+may use. Neither automatically assigns a task or transfers authority.
+
+Human-created conversations can perform any of these roles without becoming
+subagents. Tell that conversation to read the same role file and follow its
+instructions plus project guidance for the assignment; register its actual
+owner and handoff route. A conversation rename alone does not activate a native
+profile. This preserves a direct human channel while the coordinator manages
+shared ownership and dependencies.
+
+Native types inherit their parent's model, sandbox/approvals, and MCP servers.
+Read-only reviewer instructions are behavioral rules, not a separate read-only
+sandbox. Keep permission boundaries explicit in the hosting session. Another
+host can use the same role briefs without claiming Codex-native discovery.
 
 Record the current integration owner and delegation limit in `ratpack.json`.
 Names are labels; roles define responsibility, not an agent's entire scope.

@@ -21,8 +21,10 @@ Point your coordinator at this repository:
 > missing information you cannot discover. Releases still need my approval.
 
 For a local checkout, give the agent the absolute path to
-`skills/ratpack/SKILL.md`. To install it for reuse, ask Codex's skill installer
-to install `skills/ratpack` from `Spencer1O1/ratpack`, then invoke `$ratpack`.
+`skills/ratpack/SKILL.md`. To install the complete set for reuse, ask Codex's
+skill installer to install `skills/ratpack`, `skills/ratpack-role`, and
+`skills/ratpack-review` from `Spencer1O1/ratpack` at the chosen revision.
+Then invoke `$ratpack` to bootstrap a project.
 Pin the source commit when adopting a version; fetching the URL does not itself
 install a skill or activate instructions in another conversation.
 
@@ -44,6 +46,23 @@ review subagents. Cleanup and workflow agents are used as needed. Separate
 human-directed conversations can fill the same roles; names do not grant
 authority. The workflow includes reusable briefs for all five roles.
 
+Bootstrap installs five native Codex definitions in the target project's
+`.codex/agents/`: `ratpack_coordinator`, `ratpack_implementer`,
+`ratpack_reviewer`, `ratpack_cleanup`, and `ratpack_workflow`. Trusted Codex
+sessions discover these names for spawning. Reload an existing session and
+verify discovery before claiming activation. The coordinator normally remains
+the main conversation; selecting a type does not transfer merge authority.
+
+Human-created peers can explicitly read the same role file and follow its
+instructions for their assignment. They remain directly accessible to the
+human; they do not need to become subagents or acquire a particular name.
+
+| Skill | Use |
+| --- | --- |
+| [ratpack](skills/ratpack/SKILL.md) | Bootstrap and coordinate the project |
+| [ratpack-role](skills/ratpack-role/SKILL.md) | Create, update, or retire a custom brief and native definition |
+| [ratpack-review](skills/ratpack-review/SKILL.md) | Independently review a specific revision and report evidence |
+
 Roles are extensible: tell the coordinator to add a project-specific role such
 as research, with its scope and expected output. The coordinator records the
 brief in that project's `ratpack.json`. The same agent may hold different roles
@@ -58,9 +77,14 @@ still needs host support and authorization; merge restrictions need repository
 permissions and protections to be enforced technically. Existing Linear and
 GitHub tools are sufficient to start; Ratpack does not require its own server.
 
+Native profiles inherit the parent's model and permissions. A reviewer's
+read-only instructions do not create a separate sandbox. See the
+[Codex custom-agent documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents).
+
 ## Develop Ratpack
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Run with Python 3.10 or newer:
+See [CONTRIBUTING.md](CONTRIBUTING.md). Run with Python 3.11 or newer
+(the role tooling uses the standard-library TOML parser):
 
 ```bash
 python3 scripts/check.py
