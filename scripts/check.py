@@ -26,7 +26,7 @@ def check():
             if not target.exists():
                 errors.append(f"{path.relative_to(ROOT)}: missing {link}")
     for relative in [
-        "ratpack.json", "skills/ratpack/assets/project/ratpack.json"
+        "ratpack.json", "skills/rp-bootstrap/assets/project/ratpack.json"
     ]:
         config = json.loads((ROOT / relative).read_text())
         if config["schema_version"] != 1:
@@ -43,7 +43,7 @@ def check():
     for path in (ROOT / "skills").glob("*/SKILL.md"):
         if not path.read_text().startswith(f"---\nname: {path.parent.name}\ndescription:"):
             errors.append(f"{path}: skill frontmatter missing name/description")
-    assets = ROOT / "skills/ratpack/assets/project/.codex/agents"
+    assets = ROOT / "skills/rp-bootstrap/assets/project/.codex/agents"
     for path in assets.glob("*.toml"):
         profile = tomllib.loads(path.read_text())
         fields = ("name", "description", "developer_instructions")

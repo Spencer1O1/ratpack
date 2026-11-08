@@ -1,5 +1,5 @@
 ---
-name: ratpack-role
+name: rp-role
 description: Create, update, or retire a project's custom Ratpack role and its native Codex agent profile. Use for role lifecycle changes, not ordinary task assignment or conversation renaming.
 ---
 

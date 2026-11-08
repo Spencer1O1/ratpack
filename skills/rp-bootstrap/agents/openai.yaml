@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ratpack Bootstrap"
+  short_description: "Set up Ratpack without replacing project conventions"
+  default_prompt: "Use $rp-bootstrap to adopt Ratpack in this project and verify setup."

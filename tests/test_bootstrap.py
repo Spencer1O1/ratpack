@@ -4,13 +4,14 @@ import io
 import json
 from pathlib import Path
 import re
+import shutil
 import tempfile
 import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location(
-    "bootstrap", ROOT / "skills/ratpack/scripts/bootstrap.py"
+    "bootstrap", ROOT / "skills/rp-bootstrap/scripts/bootstrap.py"
 )
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
@@ -45,6 +46,25 @@ class BootstrapTest(unittest.TestCase):
         self.assertEqual(
             before, {p: p.stat().st_mtime_ns for p in self.target.rglob("*")}
         )
+
+    def test_bootstrap_runs_from_an_individually_installed_skill(self):
+        with tempfile.TemporaryDirectory() as directory:
+            package = Path(directory) / "rp-bootstrap"
+            shutil.copytree(ROOT / "skills/rp-bootstrap", package,
+                            ignore=shutil.ignore_patterns("__pycache__"))
+            spec = importlib.util.spec_from_file_location(
+                "standalone_bootstrap", package / "scripts/bootstrap.py"
+            )
+            standalone = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(standalone)
+            with contextlib.redirect_stdout(io.StringIO()):
+                standalone.bootstrap(self.target, "coordinator", True)
+            self.assertEqual(
+                (self.target / "docs/development.md").read_bytes(),
+                (package / "references/workflow.md").read_bytes(),
+            )
+            self.assertEqual(len(list((self.target / ".codex/agents").glob("*.toml"))), 5)
+            self.assertFalse((Path(directory) / "rp-coordinate").exists())
 
     def test_conflict_preserves_existing_content_and_prevents_partial_write(self):
         existing = self.target / "CONTRIBUTING.md"

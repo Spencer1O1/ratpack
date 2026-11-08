@@ -9,7 +9,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RENDERER = ROOT / "skills/ratpack-role/scripts/render_agent.py"
+RENDERER = ROOT / "skills/rp-role/scripts/render_agent.py"
 SPEC = importlib.util.spec_from_file_location("render_agent", RENDERER)
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
@@ -51,7 +51,7 @@ class AgentTest(unittest.TestCase):
             profile.write_text('name = "my-existing-reviewer"\n')
             before = {p: p.read_bytes() for p in target.rglob("*") if p.is_file()}
             result = subprocess.run([
-                sys.executable, str(ROOT / "skills/ratpack/scripts/bootstrap.py"),
+                sys.executable, str(ROOT / "skills/rp-bootstrap/scripts/bootstrap.py"),
                 directory, "--owner", "peer-coordinator", "--apply",
             ], text=True, capture_output=True)
             self.assertNotEqual(result.returncode, 0)
@@ -61,7 +61,7 @@ class AgentTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory)
             command = [
-                sys.executable, str(ROOT / "skills/ratpack/scripts/bootstrap.py"),
+                sys.executable, str(ROOT / "skills/rp-bootstrap/scripts/bootstrap.py"),
                 directory, "--owner", "human-created-coordinator", "--apply",
             ]
             subprocess.run(command, check=True, capture_output=True)

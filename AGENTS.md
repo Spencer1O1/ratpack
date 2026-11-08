@@ -1,7 +1,7 @@
 # Ratpack repository instructions
 
 Follow [CONTRIBUTING.md](CONTRIBUTING.md) and the
-[shared workflow](skills/ratpack/references/workflow.md). This repository builds
+[shared workflow](skills/rp-bootstrap/references/workflow.md). This repository builds
 the reusable workflow; it does not own the product plans of adopting projects.
 
 Keep the policy generic and human-readable. Store project-specific assignments

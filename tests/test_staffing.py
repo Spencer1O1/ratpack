@@ -23,7 +23,7 @@ class StaffingTest(unittest.TestCase):
                 schema_version=1, max_implementation_agents=limit,
                 implementation_delegation_authorized=authorized, checks=[],
             )
-            for relative in ('ratpack.json', 'skills/ratpack/assets/project/ratpack.json'):
+            for relative in ('ratpack.json', 'skills/rp-bootstrap/assets/project/ratpack.json'):
                 path = root / relative
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(json.dumps(config))
