@@ -11,7 +11,9 @@ isolation, authority, and handoff rules; invoking this skill does not make the
 implementor an independent reviewer.
 
 1. Establish the repository, base, exact proposed head SHA, task scope,
-   dependencies, and review destination. Report missing identity or acceptance
+   dependencies, and review destination. Trace material product scope to human
+   instructions or accepted decisions; flag unsupported additions even when the
+   diff satisfies an agent-written requirements document. Report missing identity or acceptance
    criteria rather than certifying an unidentified change.
 2. Inspect the diff and affected callers, tests, and contracts. Evaluate
    correctness, regressions, requirements, and evidence instead of relying on

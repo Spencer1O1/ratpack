@@ -119,6 +119,31 @@ follow the parent. Behavioral read-only instructions are not a separate sandbox.
 fresh/reloaded session before claiming activation; another host may use the same
 briefs without native discovery. Renaming a conversation does not activate a profile.
 
+## Planning and product scope
+
+The coordinator plans from the human's agreed outcomes and constraints. Agents
+may suggest new capabilities, operator actions, or materially different behavior,
+but present their benefit, cost, and tradeoffs as proposals and wait for human
+acceptance before dispatching implementation. Creating a ticket, writing a
+requirements document, or another agent approving it does not grant product
+approval. Distinguish accepted scope from proposals in the existing task/design
+record and link the human decision when needed; no separate approval ledger is
+required. Reuse approval already given in the conversation or accepted plan.
+
+Derive acceptance criteria from the agreed outcome without adding independent
+product scope. Routine implementation choices, necessary tests, and useful
+behavior-preserving cleanup remain autonomous within the assignment. Cleanup
+that changes product behavior or adds operator obligations needs the same scope
+check as a feature. A safety or reliability concern is grounds to explain the
+problem and suggest options, not to invent a mandatory product requirement.
+Continue independent authorized work while a proposal awaits a decision.
+
+Before dispatch and integration, check that material requirements have human
+support. If an existing agent-written requirement's authority is unclear, check
+its source and ask about the disputed scope rather than treating the document
+as approval. Reviewers flag unsupported scope even when code matches its written
+requirements; coordinators resolve it with the human before merging that scope.
+
 ## Task to merge
 
 For normal repository changes; release/hotfix routing is specified below.
