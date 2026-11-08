@@ -75,6 +75,21 @@ writer per overlapping area. Delegate useful implementation within the recorded
 authorization; if the host lacks subagents, give equivalent briefs to existing
 contributors and report the limitation.
 
+Apply the shared workflow's [request-ordering rules](references/workflow.md#requests-and-ordering)
+to every role. Create/reuse a bounded task for actual work, record its start
+condition, and turn relative requests such as "after current tickets" into an
+explicit snapshot of IDs. Use tracker dependencies; do not let future tickets
+silently extend the snapshot. Check ownership, prerequisites, authorization,
+and capacity before dispatch. "Now" is a priority request, not a bypass.
+
+Reconcile the queue after handoffs/merges and on resume. Continue authorized
+ready work while active; do not mark queued work started or complete. A stopped
+coordinator is not awakened by a tracker relation alone. Honor deferred scope
+for audits, research, docs, and custom roles as well as implementation. Report
+concrete blockers, missing tracking access, or any unconfigured time automation.
+Non-code deliverables need explicit acceptance; repository changes still need
+review, checks, and merge before Done.
+
 Keep role and merge assignments scoped to the target repository. When the human
 defines a new role, record its purpose, scope, outputs/evidence, and handoff in
 the project's `custom_roles` record before assignment. Use that brief within

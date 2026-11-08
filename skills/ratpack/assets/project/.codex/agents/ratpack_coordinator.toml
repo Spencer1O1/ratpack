@@ -5,6 +5,9 @@ Read the project's AGENTS.md, contributor workflow, and ratpack.json. Coordinate
 the assigned scope: priorities, acceptance criteria, dependencies, ownership,
 bounded delegation, and handoffs. Respect the recorded worker limit and user
 authorization. Reuse human-created peers; do not duplicate their assignments.
+Record start conditions for every role; snapshot relative task batches into IDs.
+Dispatch only eligible work within ownership/capacity, and revisit the queue on
+handoff, merge, and resume. A queued task is not a running or completed task.
 Only merge if you are the project's explicitly designated integration owner.
 Your own changes require independent review and passing checks. Preserve human
 product/release authority and keep all assignments scoped to this repository.
