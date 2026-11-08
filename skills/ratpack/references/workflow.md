@@ -173,6 +173,65 @@ blocker, and next owner/action. Keep unfinished worktrees until handed off.
 Session identifiers belong in task notes when needed for agent coordination;
 human contributors do not need session bookkeeping.
 
+## Requests and ordering
+
+These rules apply to every task: implementation, documentation, research,
+review, cleanup, and custom roles. The coordinator converts an actual work
+request into a new or existing bounded task in the project's tracker. Discussion
+and hypothetical examples do not create work. Reuse related tasks rather than
+opening duplicate tickets or one ticket per tiny finding.
+
+Record the outcome/scope, acceptance evidence, requested order, explicit start
+condition, owner or pending assignment, and next action. Resolve relative
+phrases while their context is available and acknowledge the captured IDs.
+
+| Request | Start condition |
+| --- | --- |
+| Now | Prioritize eligible work within existing authority, ownership, and capacity |
+| Next / when free | Queue it for the next suitable slot, keeping prerequisites intact |
+| After named tasks | Block on those exact task IDs and their accepted deliverables |
+| After current tickets | Snapshot active In Progress/In Review IDs at request time, unless the user names a different batch |
+
+The snapshot is fixed: later tickets do not silently join it. If no tasks are
+active, say so and treat the condition as already met. If the intended batch or
+start condition cannot be determined, resolve that uncertainty before dispatch;
+do not leave a promise depending on "later" only in conversation memory.
+
+Use blocking relations for dependencies. Deferred work stays Backlog until its
+start condition is met; then make it Ready and dispatch when eligible. Mark
+In Progress only when work actually starts. Use the team's available statuses
+with these meanings rather than claiming unsupported states were created.
+Exclude the target task itself and check for dependency cycles. If the new work
+is required to finish a proposed blocker, resolve the intended phase or scope
+instead of creating a circular wait (for example, a required review cannot wait
+for its own implementation issue to be Done).
+
+Now does not bypass prerequisites, another contributor's checkout/ownership,
+permissions, or worker limits. Cleanup or any custom role that edits repository
+content uses implementation capacity too. If work needs preemption, coordinate
+a safe handoff; never reset or stash someone else's work to make room. Report
+the concrete blocker and next action when immediate dispatch is impossible.
+
+The order applies to the whole requested task, including its audit/research
+phase. Do not start deferred work early under a different role name. If the
+human explicitly asks for an audit now and fixes later, record separate bounded
+tasks or phase conditions so the permitted early scope is clear.
+
+Completion follows the task's acceptance contract. Repository changes require
+independent review, passing checks, and merge into `devel`. Report-only research,
+audits, or reviews finish when the agreed artifact is delivered and accepted by
+its recipient, with required evidence retained or linked in the task. A worker's
+return alone is not acceptance.
+Reassess canceled, duplicate, or replaced prerequisites against the request and
+record the replacement/decision; neither assume success nor leave a stale block.
+
+Recheck pending work on new requests, worker handoffs, merges, and resume. While
+active and authorized, continue into eligible follow-up work rather than treating
+queue creation as completion. Tracker dependencies preserve order; they do not
+start a stopped coordinator. Calendar-based execution needs a separately
+requested and verified automation; do not claim a timer or wake-up exists merely
+because a task has a date or blocker.
+
 ## Linear
 
 Reuse existing teams and projects. Start with one team and one project per
@@ -185,7 +244,7 @@ historical roadmap item. A bounded issue normally corresponds to one PR.
 | Ready | Scope, acceptance criteria, and dependencies are clear |
 | In Progress | An owner is implementing the task |
 | In Review | A ready PR awaits independent review/integration |
-| Done | Accepted scope merged into `devel` with required checks passing |
+| Done | Accepted deliverable complete; repository changes merged into `devel` with required checks passing |
 | Canceled | Abandoned, with a reason or replacement |
 
 Ready is Unstarted; In Progress and In Review are Started. Use blocking relations

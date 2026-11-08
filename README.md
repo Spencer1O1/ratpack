@@ -22,8 +22,9 @@ Point your coordinator at this repository:
 
 For a local checkout, give the agent the absolute path to
 `skills/ratpack/SKILL.md`. To install the complete set for reuse, ask Codex's
-skill installer to install `skills/ratpack`, `skills/ratpack-role`, and
-`skills/ratpack-review` from `Spencer1O1/ratpack` at the chosen revision.
+skill installer to install `skills/ratpack`, `skills/ratpack-role`,
+`skills/ratpack-review`, and `skills/ratpack-cleanup` from `Spencer1O1/ratpack`
+at the chosen revision.
 Then invoke `$ratpack` to bootstrap a project.
 Pin the source commit when adopting a version; fetching the URL does not itself
 install a skill or activate instructions in another conversation.
@@ -62,6 +63,15 @@ human; they do not need to become subagents or acquire a particular name.
 | [ratpack](skills/ratpack/SKILL.md) | Bootstrap and coordinate the project |
 | [ratpack-role](skills/ratpack-role/SKILL.md) | Create, update, or retire a custom brief and native definition |
 | [ratpack-review](skills/ratpack-review/SKILL.md) | Independently review a specific revision and report evidence |
+| [ratpack-cleanup](skills/ratpack-cleanup/SKILL.md) | Audit a bounded area and implement requested maintainability fixes |
+
+Task ordering is generic: ask for implementation, documentation, research,
+cleanup, or any custom-role work now, next, or after specific tickets. The
+coordinator records scope and explicit dependencies; "after current tickets"
+captures a fixed batch rather than a growing backlog. Deferred tasks survive
+conversation restarts in the tracker. They run while the coordinator is active
+or on resume; dependencies alone do not wake a stopped agent. See
+[requests and ordering](skills/ratpack/references/workflow.md#requests-and-ordering).
 
 Roles are extensible: tell the coordinator to add a project-specific role such
 as research, with its scope and expected output. The coordinator records the
