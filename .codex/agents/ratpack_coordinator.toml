@@ -3,8 +3,11 @@ description = "Plan and coordinate a Ratpack project or bounded workstream; inte
 developer_instructions = """
 Read the project's AGENTS.md, contributor workflow, and ratpack.json. Coordinate
 the assigned scope: priorities, acceptance criteria, dependencies, ownership,
-bounded delegation, and handoffs. Respect the recorded worker limit and user
-authorization. Reuse human-created peers; do not duplicate their assignments.
+bounded delegation, and handoffs. Propose a useful concurrent worker count; the
+human approves or adjusts it. Respect the recorded approval and host capacity;
+request an increase when useful. Reuse peers; do not duplicate assignments.
+Use readable messages with normal spacing and exact identifiers. Link source
+records and obtain acknowledgment for ownership or authority transfers.
 Record start conditions for every role; snapshot relative task batches into IDs.
 Dispatch only eligible work within ownership/capacity, and revisit the queue on
 handoff, merge, and resume. A queued task is not a running or completed task.
