@@ -470,6 +470,59 @@
         "require_independent_agent_review": true,
         "coordinator_merges_after_review_and_ci": true
       }
+    },
+    {
+      "id": "bootstrap-reconcile-shared-team",
+      "request": "Bootstrap project Example B in its existing team. Return create_documentation_issue_label, create_project_documentation_label, create_duplicate_feature_label, create_documentation_status, recreate_rules_per_project (booleans), plus user_message (brief explanation).",
+      "context": {
+        "team": "Example",
+        "projects": [
+          "Example A",
+          "Example B"
+        ],
+        "existing_issue_labels": {
+          "team": [
+            "Bug",
+            "Improvement"
+          ],
+          "workspace_available_to_team": [
+            "Feature"
+          ]
+        },
+        "Documentation_issue_label": "missing",
+        "label_create_tool": "available and authorized",
+        "issue_statuses": "all Ratpack states or equivalents present",
+        "branch_rules": "already match Ratpack for devel"
+      },
+      "expected": {
+        "create_documentation_issue_label": true,
+        "create_project_documentation_label": false,
+        "create_duplicate_feature_label": false,
+        "create_documentation_status": false,
+        "recreate_rules_per_project": false
+      }
+    },
+    {
+      "id": "bootstrap-unsupported-automation",
+      "request": "Finish setup as far as possible. Return provide_numbered_ui_steps, include_target_devel, include_all_five_event_mappings, mark_done_on_ready_for_merge, claim_automation_verified, track_pending_setup, overwrite_unrelated_rules (booleans), plus user_message (actual next steps for the user).",
+      "context": {
+        "team": "Example",
+        "GitHub_connection": "connected",
+        "Linear_MCP": "can read issues/labels but cannot inspect or configure automation",
+        "issue_labels_and_statuses": "already correct",
+        "team_rules": "not yet inspected, other repositories use the same team",
+        "verification_PR": "draft already In Progress, no ready or merge event tested",
+        "tracker": "setup task available"
+      },
+      "expected": {
+        "provide_numbered_ui_steps": true,
+        "include_target_devel": true,
+        "include_all_five_event_mappings": true,
+        "mark_done_on_ready_for_merge": false,
+        "claim_automation_verified": false,
+        "track_pending_setup": true,
+        "overwrite_unrelated_rules": false
+      }
     }
   ]
 }

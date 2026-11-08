@@ -197,10 +197,24 @@ Documentation labels; docs use the same states. Feature-required docs belong
 in that feature's acceptance. Prefer owners, priorities, projects, and blocking
 relations over redundant labels. Extra labels and cycles are optional.
 
-Configure supported GitHub automation targeting `devel`: draft → In Progress,
-ready PR → In Review, merge → Done. Verify it with a real linked PR; state
-changes are not independent approval. If access/automation is unavailable,
-link evidence and update manually, track pending setup, and keep work moving.
+Configure supported GitHub automation for PRs targeting `devel`:
+
+| Event | Destination |
+| --- | --- |
+| Draft PR opened | In Progress |
+| PR opened / marked ready | In Review |
+| Review requested or review activity | In Review |
+| PR ready for merge | No action |
+| PR merged | Done |
+
+`devel` accepts implementation; promotion to `main` is a separately approved
+release. Passing checks or review alone does not complete a task. Team settings
+are shared by its projects: preserve unrelated branch rules and coordinate any
+change affecting other repositories. Verify linking and transitions with a real
+closing-linked PR; state changes are not independent approval. If access or
+automation is unavailable, give the exact setup steps, link evidence and update
+manually, track pending setup, and keep work moving. Distinguish settings that
+were inspected from automatic events that were actually observed.
 
 ## Branches and releases
 

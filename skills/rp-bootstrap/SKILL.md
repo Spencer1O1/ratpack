@@ -24,7 +24,9 @@ project's names, account identifiers, or production settings.
    with current owners. Keep transient setup status and handoffs in the tracker,
    or the conversation while no tracker is available; repo docs retain durable rules.
 4. Configure the agreed branch policy, protections, and tracker conventions
-   within actual authorization. Record unsupported settings or pending access.
+   within actual authorization. Reconcile team issue labels/statuses and branch
+   automations using the setup guidance; fix supported gaps and give exact UI
+   steps for the rest. Record unsupported settings or pending access.
 5. Run local checks and realistic adoption checks. Verify external settings and
    automation separately; generated files alone are not evidence they work.
    Verify native discovery in a trusted fresh/reloaded session before claiming
