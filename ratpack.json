@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "workflow_version": "0.1.0",
+  "integration_owner": "Spencer1O1",
+  "max_implementation_agents": 2,
+  "implementation_delegation_authorized": false,
+  "checks": [
+    "python3 scripts/check.py",
+    "python3 -m unittest discover -s tests -v"
+  ],
+  "github_repository": "Spencer1O1/ratpack",
+  "linear_team": null
+}
