@@ -21,6 +21,9 @@ Keep personal model preferences and agent sessions local or in assignment notes,
 not in shared project configuration. Never put local pack files or their hashes
 in the adoption lock. Another developer joining an adopted project initializes
 only their local pack; shared config, policy, profiles, and lock stay unchanged.
+A worker in another worktree remains part of its assigning pack: include the
+pack coordinator/local-config path and relevant settings in its assignment. Do
+not bootstrap another coordinator or commit local settings for each worktree.
 A local file cannot grant repository integration authority. Legacy mixed configs
 need deliberate separation, preserving agreed merge authority and project facts;
 do not blindly copy one developer's coordinator or staffing into another pack.

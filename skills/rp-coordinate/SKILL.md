@@ -6,7 +6,8 @@ description: Plan and coordinate an adopted Ratpack project's tasks, workers, re
 # Ratpack Coordinate
 
 Read the project's AGENTS.md, linked contributor workflow, `ratpack.json`,
-this developer's ignored `ratpack.local.json`, shared task queue/handoff, and
+this pack's ignored `ratpack.local.json` in its coordinator checkout (or the
+path supplied in the assignment), shared task queue/handoff, and
 relevant requirements. Follow the adopted policy and explicit user decisions. If setup or ownership is missing, identify the gap
 and resolve it before dispatch; do not install or upgrade policy as a side effect.
 

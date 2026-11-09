@@ -758,6 +758,23 @@
         "preserve_shared_project_facts": true,
         "reconcile_explicit_human_authority": true
       }
+    },
+    {
+      "id": "worker-worktree-same-pack",
+      "request": "Start the assigned implementation in a new worktree. Return initialize_another_pack, commit_local_config_to_share_it, use_assigning_pack_settings, retain_shared_task_owner (booleans), plus reason.",
+      "context": {
+        "worker": "imp-rat-storage, explicitly assigned TASK-9",
+        "worktree": "new feature worktree; Git did not copy ignored ratpack.local.json",
+        "assignment": "names coordinator alice-rat, path to its local config in main checkout, approved capacity and owned paths",
+        "shared_files": "same project config/workflow/tracker",
+        "user": "no request for another coordinator"
+      },
+      "expected": {
+        "initialize_another_pack": false,
+        "commit_local_config_to_share_it": false,
+        "use_assigning_pack_settings": true,
+        "retain_shared_task_owner": true
+      }
     }
   ]
 }
