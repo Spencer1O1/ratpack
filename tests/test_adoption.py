@@ -46,7 +46,7 @@ class AdoptionTest(unittest.TestCase):
 
     def install(self, revision=SHA):
         with contextlib.redirect_stdout(io.StringIO()):
-            self.bootstrap.bootstrap(self.target, "human-coordinator", True, revision)
+            self.bootstrap.bootstrap(self.target, True, revision)
 
     def lock(self):
         return json.loads((self.target / "ratpack.lock.json").read_text())
@@ -86,7 +86,7 @@ class AdoptionTest(unittest.TestCase):
         # A matching rerun preserves the original record even if source metadata changes.
         with patch.object(self.adoption, "source_provenance", return_value=(SHA, "git-verified")):
             with contextlib.redirect_stdout(io.StringIO()):
-                self.bootstrap.bootstrap(self.target, "human-coordinator", True)
+                self.bootstrap.bootstrap(self.target, True)
         self.assertEqual(before, snapshot(self.target))
         self.assertIn("unknown", " ".join(self.upgrade.preview(self.target)["warnings"]))
 
@@ -122,7 +122,7 @@ class AdoptionTest(unittest.TestCase):
     def test_invalid_revision_and_legacy_adoption_do_not_write(self):
         for revision in ["main", "a" * 39, "g" * 40]:
             with self.subTest(revision=revision), self.assertRaises(ValueError):
-                self.bootstrap.prepare(self.target, "owner", revision)
+                self.bootstrap.prepare(self.target, revision)
         self.assertEqual(list(self.target.iterdir()), [])
         (self.target / "ratpack.json").write_text('{"integration_owner":"existing"}')
         before = snapshot(self.target)
@@ -134,7 +134,7 @@ class AdoptionTest(unittest.TestCase):
         self.install()
         before = snapshot(self.target)
         with self.assertRaisesRegex(ValueError, "provenance differs"):
-            self.bootstrap.prepare(self.target, "human-coordinator", "f" * 40)
+            self.bootstrap.prepare(self.target, "f" * 40)
         self.assertEqual(before, snapshot(self.target))
         lock = self.target / "ratpack.lock.json"
         outside = self.root / "outside-manifest.json"
@@ -142,7 +142,7 @@ class AdoptionTest(unittest.TestCase):
         lock.unlink()
         lock.symlink_to(outside)
         with self.assertRaisesRegex(ValueError, "symlink"):
-            self.bootstrap.prepare(self.target, "human-coordinator", SHA)
+            self.bootstrap.prepare(self.target, SHA)
         self.assertEqual(outside.read_bytes(), before["ratpack.lock.json"][0])
 
     def test_three_way_preview_classifies_changes_and_preserves_project(self):

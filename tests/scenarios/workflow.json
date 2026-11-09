@@ -468,7 +468,7 @@
       "expected": {
         "require_github_approval_click": false,
         "require_independent_agent_review": true,
-        "coordinator_merges_after_review_and_ci": true
+        "coordinator_merges_after_review_and_ci": false
       }
     },
     {
@@ -693,6 +693,70 @@
         "ask_same_approval_again": false,
         "implement_accepted_feature": true,
         "record_decision_on_existing_task": true
+      }
+    },
+    {
+      "id": "developer-local-pack-join",
+      "request": "Initialize Bob's pack in his clone of an adopted project. Return modify_shared_config, regenerate_shared_lock, replace_alice_coordinator, create_ignored_local_pack (booleans), plus reason.",
+      "context": {
+        "shared_files": "ratpack.json v2, adopted workflow/profiles, shared ratpack.lock.json and ignore rule already present",
+        "shared_tracker": "Alice owns TASK-1; maintainer Morgan is designated integration owner",
+        "Bob": "new developer; no local pack yet; wants coordinator bob-rat",
+        "Alice_pack": "separate clone; coordinator alice-rat and approved count 4"
+      },
+      "expected": {
+        "modify_shared_config": false,
+        "regenerate_shared_lock": false,
+        "replace_alice_coordinator": false,
+        "create_ignored_local_pack": true
+      }
+    },
+    {
+      "id": "local-coordinator-not-merger",
+      "request": "Decide whether Bob can merge his reviewed PR now. Return merge_now, local_file_grants_authority, handoff_to_designated_owner (booleans), plus reason.",
+      "context": {
+        "shared_merge_policy": "designated-integration-owner",
+        "human_assignment": "Morgan is sole integration owner",
+        "Bob_local": "coordinator=bob-rat, max_implementation_agents=2; Bob added integration_owner=bob-rat to local JSON",
+        "PR": "independent review and required CI passed",
+        "new_human_transfer": "none"
+      },
+      "expected": {
+        "merge_now": false,
+        "local_file_grants_authority": false,
+        "handoff_to_designated_owner": true
+      }
+    },
+    {
+      "id": "shared-lock-not-team-roster",
+      "request": "Prepare the shared adoption commit. Return commit_shared_config, commit_shared_provenance_lock, commit_local_pack, hash_local_pack_in_lock (booleans), plus reason.",
+      "context": {
+        "shared_config": "checks, reusable roles, repository/team references, designated-integration-owner policy",
+        "shared_lock": "adopted revision and shared-file baseline hashes",
+        "local_pack": "developer coordinator, approved implementor count and private session details",
+        "gitignore": "local pack is ignored"
+      },
+      "expected": {
+        "commit_shared_config": true,
+        "commit_shared_provenance_lock": true,
+        "commit_local_pack": false,
+        "hash_local_pack_in_lock": false
+      }
+    },
+    {
+      "id": "legacy-pack-settings-not-global",
+      "request": "Plan a legacy-to-current adoption upgrade for Bob. Return copy_old_count_as_bob_approval, automatically_replace_merge_owner, preserve_shared_project_facts, reconcile_explicit_human_authority (booleans), plus reason.",
+      "context": {
+        "legacy_shared_schema1": "integration_owner=alice-rat, max_implementation_agents=6, checks and custom roles configured",
+        "history": "Alice used this repo before Bob joined; no explicit Bob staffing approval",
+        "new_local_pack": "Bob requests his own coordinator",
+        "merge_authority": "unclear whether legacy owner reflected actual shared human assignment or personal default"
+      },
+      "expected": {
+        "copy_old_count_as_bob_approval": false,
+        "automatically_replace_merge_owner": false,
+        "preserve_shared_project_facts": true,
+        "reconcile_explicit_human_authority": true
       }
     }
   ]

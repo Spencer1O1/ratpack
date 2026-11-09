@@ -6,16 +6,17 @@ setup blocker. The [workflow](workflow.md) owns authority and staffing policy.
 ## Questions people can answer
 
 Recommend a concrete setup based on the repository and explain its consequence.
-Infer facts from available tools before asking; reuse prior answers. If no owner
-exists, propose this conversation as coordinator and sole PR merger, then get
-that assignment confirmed. Do not ask the user to select internal JSON fields,
+Infer facts from available tools before asking; reuse prior answers. For a new local pack, propose this conversation as its coordinator. Inspect
+the repository's existing integration assignment separately; joining a project
+must not claim or replace its merger. If that assignment is missing, resolve it
+with the human before integration. Do not ask the user to select internal JSON fields,
 enable delegation, or choose an implementor count during bootstrap. Explain
 that the coordinator arranges helpers and independent review; implementation
 staffing is proposed when there is actual implementation ready to assign.
 
 For GitHub settings, name the repository, proposed changes, and any decision
 that affects the human. Follow the workflow's default of independent agent
-review, passing CI, and coordinator integration with no GitHub approval click.
+review, passing CI, and designated-owner integration with no GitHub approval click.
 Explain any existing GitHub approval requirement and its available approvers;
 do not invent that requirement during setup. If an
 approval system rejects the action, explain its reason and request the specific

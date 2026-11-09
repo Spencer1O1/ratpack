@@ -40,31 +40,37 @@ def project_path(root, relative):
 
 def check_configuration(root, add):
     try:
-        config = json.loads(project_path(root, "ratpack.json").read_text())
+        config = ADOPTION["parse_json"](project_path(root, "ratpack.json").read_bytes())
         if not isinstance(config, dict):
             raise ValueError("expected an object")
     except (OSError, UnicodeError, ValueError):
         add("configuration", "fail", "ratpack.json must be a readable JSON object inside the project.")
         config = None
     if config is not None:
-        if type(config.get("schema_version")) is not int or config["schema_version"] != 1:
-            add("configuration.schema", "fail", "schema_version must be 1.")
+        version = config.get("schema_version")
+        if type(version) is int and version == 1:
+            add("configuration.schema", "warn", "Legacy shared schema 1: reconcile owner and staffing into local settings deliberately; no files were rewritten.")
+            owner = config.get("integration_owner")
+            add("configuration.owner", "pass" if isinstance(owner, str) and owner.strip() else "fail",
+                "Legacy integration owner is recorded; reconcile current merge authority deliberately." if isinstance(owner, str) and owner.strip()
+                else "Legacy integration_owner is absent or invalid; reconcile shared/local configuration deliberately.")
+            count = config.get("max_implementation_agents")
+            count_valid = "max_implementation_agents" in config and (count is None or type(count) is int and count >= 0)
+            if not count_valid:
+                add("configuration.staffing", "fail", "Use a nonnegative integer or null implementation worker count.")
+            elif count is None:
+                add("configuration.staffing", "warn", "Propose an implementor count when implementation is ready to start.")
+            elif count == 0:
+                add("configuration.staffing", "pass", "No implementation helpers are requested; independent review remains part of the workflow.")
+            else:
+                add("configuration.staffing", "pass", "An implementation worker limit is recorded; human approval was not independently verified.")
         else:
-            add("configuration.schema", "pass", "Supported configuration schema.")
-        owner = config.get("integration_owner")
-        add("configuration.owner", "pass" if isinstance(owner, str) and owner.strip() else "fail",
-            "Integration owner is recorded." if isinstance(owner, str) and owner.strip()
-            else "Record a nonempty integration_owner before integration.")
-        count = config.get("max_implementation_agents")
-        count_valid = "max_implementation_agents" in config and (count is None or type(count) is int and count >= 0)
-        if not count_valid:
-            add("configuration.staffing", "fail", "Use a nonnegative integer or null implementation worker count.")
-        elif count is None:
-            add("configuration.staffing", "warn", "Propose an implementor count when implementation is ready to start.")
-        elif count == 0:
-            add("configuration.staffing", "pass", "No implementation helpers are requested; independent review remains part of the workflow.")
-        else:
-            add("configuration.staffing", "pass", "An implementation worker limit is recorded; human approval was not independently verified.")
+            try:
+                ADOPTION["validate_shared"](config)
+            except ValueError as error:
+                add("configuration.schema", "fail", str(error))
+            else:
+                add("configuration.schema", "pass", "Shared schema 2 records project policy; merge authority requires explicit designation.")
         if "implementation_delegation_authorized" in config:
             add("configuration.legacy_delegation", "warn", "Retired delegation flag found; reconcile with explicit human instructions when adopting the current workflow.")
         commands = config.get("checks")
@@ -92,6 +98,19 @@ def check_configuration(root, add):
                     label + (" reference is configured; service access and automation were not checked."
                              if value else " is not configured; manual tracking remains possible."))
     add("integration.protections", "unverified", "Remote branch protections, required approvals, and CI results were not checked.")
+
+
+def check_local(root, add):
+    try:
+        path = ADOPTION["checked_path"](root, ADOPTION["LOCAL"])
+        if not path.exists():
+            add("local.configuration", "warn", "No local pack configured; join with bootstrap.py TARGET --local --coordinator NAME.")
+            return
+        ADOPTION["validate_local"](ADOPTION["parse_json"](path.read_bytes()))
+        ADOPTION["require_safe_ignore"](root)
+        add("local.configuration", "pass", "Local coordinator and staffing are valid and ignored; these settings grant no merge authority.")
+    except (OSError, UnicodeError, ValueError, subprocess.SubprocessError) as error:
+        add("local.configuration", "fail", str(error))
 
 
 def check_git(root, add):
@@ -199,6 +218,7 @@ def inspect_project(target, workflow="docs/development.md", native=False):
             add(name, "pass", "Required project file exists; policy semantics were not evaluated.")
 
     check_configuration(root, add)
+    check_local(root, add)
     check_git(root, add)
     check_profiles(root, native, add)
     check_adoption(root, add)

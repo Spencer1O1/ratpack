@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Check packaged resources, Markdown links, and the project assignment file."""
 
-import json
 from pathlib import Path
 import re
+import runpy
 import tomllib
 from urllib.parse import unquote
 
@@ -25,17 +25,23 @@ def check():
             target = path.parent / unquote(link.split("#")[0])
             if not target.exists():
                 errors.append(f"{path.relative_to(ROOT)}: missing {link}")
-    for relative in [
-        "ratpack.json", "skills/rp-bootstrap/assets/project/ratpack.json"
-    ]:
-        config = json.loads((ROOT / relative).read_text())
-        if config["schema_version"] != 1:
-            errors.append(f"{relative}: unsupported schema version")
-        limit = config["max_implementation_agents"]
-        if limit is not None and (type(limit) is not int or limit < 0):
-            errors.append(f"{relative}: worker limit must be null or a nonnegative integer")
-        if not all(isinstance(c, str) and c for c in config["checks"]):
-            errors.append(f"{relative}: checks must contain command strings")
+    adoption = runpy.run_path(str(Path(__file__).resolve().parents[1] / "skills/rp-bootstrap/scripts/adoption.py"))
+    for relative in ("ratpack.json", "skills/rp-bootstrap/assets/project/ratpack.json"):
+        try:
+            adoption["validate_shared"](adoption["parse_json"]((ROOT / relative).read_bytes()))
+        except ValueError as error:
+            errors.append(f"{relative}: {error}")
+    local_template = ROOT / "skills/rp-bootstrap/assets/local/ratpack.local.json"
+    try:
+        local = adoption["parse_json"](local_template.read_bytes())
+        # A distributable template must not contain a real local identity.
+        if not isinstance(local, dict) or local.get("coordinator") is not None:
+            raise ValueError("Local template must be an object without an identity")
+        adoption["validate_local"]({**local, "coordinator": "template-validation"})
+    except (OSError, ValueError) as error:
+        errors.append(str(error))
+    if (ROOT / "skills/rp-bootstrap/assets/project/ratpack.local.json").exists():
+        errors.append("Local configuration must not be packaged as shared project content")
     for path in (ROOT / "skills").glob("*/SKILL.md"):
         if not path.read_text().startswith(f"---\nname: {path.parent.name}\ndescription:"):
             errors.append(f"{path}: skill frontmatter missing name/description")

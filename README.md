@@ -1,8 +1,8 @@
 # Ratpack
 
 A workflow for humans and agents building projects with Linear and GitHub.
-One coordinator organizes work; independent reviewers check changes; one
-integration owner merges. Feature branches integrate into `devel`; releases
+Each developer can have a coordinator and agents; independent reviewers check
+changes, and the project's designated integration owner merges. Feature branches integrate into `devel`; releases
 promote `devel` to `main`.
 
 ## Start
@@ -11,6 +11,10 @@ Give your agent this request:
 
 > Use `skills/rp-bootstrap/SKILL.md` from https://github.com/ratpack-workflow/ratpack
 > to set up Ratpack in this project.
+
+If the repository already uses Ratpack, ask the agent to join its existing
+workflow and initialize only your local pack. Shared `ratpack.json` and adoption
+lock are committed; your `ratpack.local.json` is ignored.
 
 If the skills are already installed, use `$rp-bootstrap` for setup and
 `$rp-coordinate` for ongoing work. To install them, use your skill installer
