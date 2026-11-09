@@ -238,9 +238,39 @@ def require_untracked_local(target):
     for key in ("GIT_DIR", "GIT_COMMON_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE"):
         env.pop(key, None)
     env.update(GIT_OPTIONAL_LOCKS="0", GIT_TERMINAL_PROMPT="0")
-    result = subprocess.run(["git", "--no-optional-locks", "-c", "core.fsmonitor=false", "-C", str(target),
-                             "ls-files", "--", LOCAL], capture_output=True, text=True, env=env, timeout=10)
-    if result.returncode == 0 and result.stdout.strip():
+    env["LC_ALL"] = "C"
+    command = ["git", "--no-optional-locks", "-c", "core.fsmonitor=false", "-C", str(target)]
+    repository = subprocess.run([*command, "rev-parse", "--is-inside-work-tree"],
+                                capture_output=True, text=True, env=env, timeout=10)
+    if repository.returncode:
+        # Exit 128 also reports unreadable repositories and unsafe ownership.
+        # Accept only Git's ordinary non-repository diagnostic, with no existing
+        # repository metadata that could conceal an inaccessible index. Empty
+        # .git directories (including temporary-directory discovery guards) do
+        # not constitute repository metadata.
+        diagnostic = repository.stderr.strip()
+        ordinary_nonrepo = diagnostic == (
+            "fatal: not a git repository (or any of the parent directories): .git") or bool(re.fullmatch(
+                r"fatal: not a git repository \(or any parent up to mount point [^\n]+\)\n"
+                r"Stopping at filesystem boundary \(GIT_DISCOVERY_ACROSS_FILESYSTEM not set\)\.", diagnostic))
+        if ordinary_nonrepo:
+            for parent in (target, *target.parents):
+                marker = parent / ".git"
+                try:
+                    marker.lstat()
+                except FileNotFoundError:
+                    continue
+                if marker.is_symlink() or not marker.is_dir() or any(marker.iterdir()):
+                    ordinary_nonrepo = False
+                    break
+        if ordinary_nonrepo:
+            return
+        raise ValueError("Unable to verify whether local configuration is tracked; Git repository inspection failed")
+    if repository.stdout.strip() != "true":
+        raise ValueError("Local configuration requires a Git worktree or a directory outside Git")
+    result = subprocess.run([*command, "ls-files", "--", LOCAL],
+                            capture_output=True, text=True, env=env, timeout=10)
+    if result.returncode:
+        raise ValueError("Unable to verify whether local configuration is tracked; Git index inspection failed")
+    if result.stdout.strip():
         raise ValueError("ratpack.local.json is already tracked; reconcile and untrack it deliberately before joining")
-    if result.returncode not in (0, 128):
-        raise ValueError("Unable to verify whether local configuration is tracked")

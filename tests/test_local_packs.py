@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from test_adoption import load_script, snapshot, SHA, SOURCE
 
@@ -123,6 +124,45 @@ class LocalPacksTest(unittest.TestCase):
         before = snapshot(self.project)
         with self.assertRaisesRegex(ValueError, 'already tracked'):
             self.adopt()
+        self.assertEqual(before, snapshot(self.project))
+
+    def test_corrupt_tracked_index_blocks_join_and_preserves_all_bytes(self):
+        self.adopt()
+        self.git(self.project, 'init', '-b', 'main')
+        local = self.project / 'ratpack.local.json'
+        local.write_text('{"schema_version":1,"coordinator":"old","max_implementation_agents":null}')
+        self.git(self.project, 'add', '-f', 'ratpack.local.json')
+        index = self.project / '.git/index'
+        original_index = index.read_bytes()
+        local.unlink()
+        index.write_bytes(b'corrupted index')
+        before = snapshot(self.project)
+        with self.assertRaisesRegex(ValueError, 'Git index inspection failed'):
+            quiet(BOOTSTRAP.join_local, self.project, 'new-private-coordinator', apply=True)
+        self.assertEqual(before, snapshot(self.project))
+        self.assertFalse(local.exists())
+        index.write_bytes(original_index)
+        self.assertEqual(self.git(self.project, 'ls-files', '--', 'ratpack.local.json').strip(), 'ratpack.local.json')
+
+    def test_repository_read_failure_blocks_join_and_shared_adoption(self):
+        self.adopt()
+        before = snapshot(self.project)
+        failed = subprocess.CompletedProcess([], 128, '', 'fatal: detected dubious ownership in repository')
+        with patch.object(BOOTSTRAP.adoption.subprocess, 'run', return_value=failed):
+            with self.assertRaisesRegex(ValueError, 'Git repository inspection failed'):
+                quiet(BOOTSTRAP.join_local, self.project, 'private-coordinator', apply=True)
+            with self.assertRaisesRegex(ValueError, 'Git repository inspection failed'):
+                quiet(BOOTSTRAP.bootstrap, self.project, apply=True, source_revision=SHA)
+        self.assertEqual(before, snapshot(self.project))
+
+    def test_broken_repository_metadata_is_not_treated_as_non_git(self):
+        self.adopt()
+        metadata = self.project / '.git'
+        metadata.mkdir()
+        (metadata / 'index').write_bytes(b'unreadable repository fixture')
+        before = snapshot(self.project)
+        with self.assertRaisesRegex(ValueError, 'Git repository inspection failed'):
+            quiet(BOOTSTRAP.join_local, self.project, 'private-coordinator', apply=True)
         self.assertEqual(before, snapshot(self.project))
 
     def test_legacy_configuration_and_manifest_survive_all_previews(self):
