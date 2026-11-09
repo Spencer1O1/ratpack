@@ -52,7 +52,7 @@ class AgentTest(unittest.TestCase):
             before = {p: p.read_bytes() for p in target.rglob("*") if p.is_file()}
             result = subprocess.run([
                 sys.executable, str(ROOT / "skills/rp-bootstrap/scripts/bootstrap.py"),
-                directory, "--owner", "peer-coordinator", "--apply",
+                directory, "--apply",
             ], text=True, capture_output=True)
             self.assertNotEqual(result.returncode, 0)
             self.assertEqual(before, {p: p.read_bytes() for p in target.rglob("*") if p.is_file()})
@@ -62,7 +62,7 @@ class AgentTest(unittest.TestCase):
             target = Path(directory)
             command = [
                 sys.executable, str(ROOT / "skills/rp-bootstrap/scripts/bootstrap.py"),
-                directory, "--owner", "human-created-coordinator", "--apply",
+                directory, "--apply",
             ]
             subprocess.run(command, check=True, capture_output=True)
             profiles = list((target / ".codex/agents").glob("*.toml"))
@@ -79,8 +79,8 @@ class AgentTest(unittest.TestCase):
             })
             config_path = target / "ratpack.json"
             config = json.loads(config_path.read_text())
-            self.assertEqual(config["integration_owner"], "human-created-coordinator")
-            self.assertIsNone(config["max_implementation_agents"])
+            self.assertEqual(config["merge_policy"], "designated-integration-owner")
+            self.assertNotIn("max_implementation_agents", config)
             config["custom_roles"]["research"] = {"purpose": "Keep my research role"}
             config_path.write_text(json.dumps(config))
             before = {p: p.read_bytes() for p in target.rglob("*") if p.is_file()}

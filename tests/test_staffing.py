@@ -1,34 +1,12 @@
-import contextlib
-import importlib.util
-import io
-import json
 from pathlib import Path
-import tempfile
+import runpy
 import unittest
-from unittest.mock import patch
-
-
-SPEC = importlib.util.spec_from_file_location(
-    'ratpack_check', Path(__file__).resolve().parents[1] / 'scripts/check.py'
-)
-MODULE = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(MODULE)
 
 
 class StaffingTest(unittest.TestCase):
     def validate(self, limit):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            config = dict(
-                schema_version=1, max_implementation_agents=limit,
-                checks=[],
-            )
-            for relative in ('ratpack.json', 'skills/rp-bootstrap/assets/project/ratpack.json'):
-                path = root / relative
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_text(json.dumps(config))
-            with patch.object(MODULE, 'ROOT', root), contextlib.redirect_stdout(io.StringIO()):
-                MODULE.check()
+        adoption = runpy.run_path(str(Path(__file__).resolve().parents[1] / 'skills/rp-bootstrap/scripts/adoption.py'))
+        adoption['validate_local'](dict(schema_version=1, coordinator="local-coordinator", max_implementation_agents=limit))
 
     def test_unapproved_and_approved_counts_including_more_than_two(self):
         for limit in (None, 0, 2, 8):
@@ -37,5 +15,5 @@ class StaffingTest(unittest.TestCase):
 
     def test_invalid_counts_are_rejected(self):
         for limit in (-1, True, '8'):
-            with self.subTest(limit=limit), self.assertRaises(SystemExit):
+            with self.subTest(limit=limit), self.assertRaises(ValueError):
                 self.validate(limit)

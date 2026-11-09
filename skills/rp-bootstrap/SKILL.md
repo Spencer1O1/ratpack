@@ -10,13 +10,17 @@ instructions, requirements, ownership, and handoff. Preserve existing policy and
 authority until deliberate adoption decisions are made; do not import another
 project's names, account identifiers, or production settings.
 
-1. Inspect status, branches, worktrees, remotes, checks, and active ownership.
+1. Determine whether the repository needs shared adoption or this developer only
+   needs to join its existing workflow. For joining, read the existing rules,
+   initialize only local pack settings as below, and verify this developer's
+   access. Skip shared setup changes; do not regenerate guidance or its lock.
+   Inspect status, branches, worktrees, remotes, checks, and active ownership.
    Prepare changes in an isolated worktree when the checkout is occupied.
 2. Discover existing GitHub/Linear connections, repository, team, projects,
    statuses, labels, and permissions. Resolve missing setup decisions with the
    human using [the setup guidance](references/setup.md). Explain recommendations
    in plain language; defer implementor staffing until implementation is ready.
-3. Reconcile contributor guidance, `ratpack.json`, PR template, and native
+3. Reconcile shared contributor guidance, `ratpack.json`, PR template, and native
    profiles with existing files. Keep one project workflow; merge into its
    owning documents rather than replacing instructions or creating rivals.
    Reconcile legacy task/status/handoff mirrors with the tracker; retain their
@@ -39,12 +43,26 @@ The helper previews starter files in an existing directory and refuses to
 overwrite differing content or write through symlink output paths:
 
 ```bash
-python3 scripts/bootstrap.py /path/to/project --owner coordinator-name
+python3 scripts/bootstrap.py /path/to/project
 ```
 
 Run from this skill's directory with Python 3.11+. Add `--apply` to write.
 The helper does not change Git or accounts. Reconcile conflicts manually and
-fill configuration from the project's actual commands and identifiers.
+fill shared configuration from the project's actual commands and identifiers.
+After adoption, each developer initializes a local pack independently:
+
+```bash
+python3 scripts/bootstrap.py /path/to/project --local --coordinator my-coordinator
+```
+
+This also previews by default; add `--apply` to create ignored
+`ratpack.local.json`. It must not change shared config or `ratpack.lock.json`.
+Joining ends after local validation; shared review/integration applies only to
+shared changes. Choose an implementor count only when implementation is ready;
+existing local count and optional `model_preferences` are preserved on rerun.
+Local setup grants no merge rights. The old `--owner`
+shared-initialization interface is retired; reconcile legacy mixed config before
+using the current schema rather than treating a local coordinator as maintainer.
 
 For an installed copy, pass `--source-revision <commit>` when the pinned source
 commit is known. Bootstrap records provenance and generated-file hashes in

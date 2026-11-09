@@ -65,19 +65,13 @@ def preview(target, source_revision=None):
         warnings.append("Candidate source revision supplied; not verified against source Git bytes")
 
     config_path = adoption.checked_path(target, "ratpack.json")
-    owner = None
     if config_path.exists():
         try:
             config = adoption.parse_json(config_path.read_bytes())
-            if not isinstance(config, dict):
-                raise ValueError("configuration must be an object")
-            owner = config.get("integration_owner")
-            if owner is not None and not isinstance(owner, str):
-                raise ValueError("integration_owner must be a string or null")
+            adoption.validate_shared(config)
         except ValueError as error:
-            warnings.append(f"Manual configuration reconciliation required: {error}")
-            owner = None
-    candidate = adoption.render_outputs(SKILL, owner)
+            warnings.append(f"Manual configuration reconciliation required: {error}; existing configuration and manifest are preserved")
+    candidate = adoption.render_outputs(SKILL)
     baseline = manifest["files"] if manifest is not None else {}
     names = sorted(set(baseline) | set(candidate))
     paths = {name: adoption.checked_path(target, name) for name in names}
@@ -95,7 +89,7 @@ def preview(target, source_revision=None):
         }
         if name == "ratpack.json" and (status != "unchanged" or manifest is None):
             record["manual_reconciliation"] = True
-            warnings.append("ratpack.json needs manual configuration reconciliation: retain owner, worker count, custom roles, and other project settings; the diff compares upstream defaults, not a replacement plan. Hashes cannot recover old field-level defaults.")
+            warnings.append("ratpack.json needs manual configuration reconciliation: retain owner, worker count, custom roles, and other legacy/project settings during deliberate shared/local reconciliation; local settings confer no merge authority; the diff compares upstream defaults, not a replacement plan. Hashes cannot recover old field-level defaults.")
         if record["diff"] is None:
             warnings.append(f"{name}: binary content differs; text diff unavailable")
         records.append(record)

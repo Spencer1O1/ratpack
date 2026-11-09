@@ -25,7 +25,7 @@ class BootstrapTest(unittest.TestCase):
 
     def run_bootstrap(self, apply=False):
         with contextlib.redirect_stdout(io.StringIO()):
-            MODULE.bootstrap(self.target, "coordinator", apply)
+            MODULE.bootstrap(self.target, apply)
 
     def test_preview_does_not_create_files_or_directories(self):
         self.run_bootstrap()
@@ -34,9 +34,10 @@ class BootstrapTest(unittest.TestCase):
     def test_apply_creates_self_contained_project_and_is_idempotent(self):
         self.run_bootstrap(apply=True)
         config = json.loads((self.target / "ratpack.json").read_text())
-        self.assertEqual(config["integration_owner"], "coordinator")
+        self.assertEqual(config["merge_policy"], "designated-integration-owner")
+        self.assertNotIn("integration_owner", config)
         self.assertNotIn("implementation_delegation_authorized", config)
-        self.assertIsNone(config["max_implementation_agents"])
+        self.assertNotIn("max_implementation_agents", config)
         for path in self.target.rglob("*.md"):
             for link in re.findall(r"\]\(([^)]+)\)", path.read_text()):
                 if "://" not in link and not link.startswith("#"):
@@ -58,7 +59,7 @@ class BootstrapTest(unittest.TestCase):
             standalone = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(standalone)
             with contextlib.redirect_stdout(io.StringIO()):
-                standalone.bootstrap(self.target, "coordinator", True)
+                standalone.bootstrap(self.target, True)
             self.assertEqual(
                 (self.target / "docs/development.md").read_bytes(),
                 (package / "references/workflow.md").read_bytes(),
@@ -88,11 +89,9 @@ class BootstrapTest(unittest.TestCase):
             self.run_bootstrap(apply=True)
         self.assertFalse((self.target / "AGENTS.md").exists())
 
-    def test_rejects_missing_project_and_empty_owner(self):
+    def test_rejects_missing_project(self):
         with self.assertRaises(ValueError):
-            MODULE.prepare(self.target / "missing", "coordinator")
-        with self.assertRaises(ValueError):
-            MODULE.prepare(self.target, " ")
+            MODULE.prepare(self.target / "missing")
 
 
 if __name__ == "__main__":

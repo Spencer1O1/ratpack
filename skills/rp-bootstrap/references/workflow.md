@@ -5,6 +5,29 @@ task state, ownership, and dependencies; GitHub owns code and review evidence;
 repository documents own requirements and design. Use the adopted project
 workflow and explicit user decisions; upstream changes require deliberate adoption.
 
+## Shared project and developer packs
+
+Each developer may run a separate pack: a coordinator and its agents working
+within the repository's shared rules. Coordinate assignments through the shared
+tracker so packs do not duplicate or overwrite each other's work.
+
+| File | Scope and version control |
+| --- | --- |
+| `ratpack.json` | Commit shared checks, reusable roles, repository/tracker references, and merge policy |
+| `ratpack.lock.json` | Commit the adopted upstream revision and shared-file baseline hashes; it is provenance, not a running-agent lock |
+| `ratpack.local.json` | Ignore developer-local coordinator identity and approved implementor count |
+
+Keep personal model preferences and agent sessions local or in assignment notes,
+not in shared project configuration. Never put local pack files or their hashes
+in the adoption lock. Another developer joining an adopted project initializes
+only their local pack; shared config, policy, profiles, and lock stay unchanged.
+A worker in another worktree remains part of its assigning pack: include the
+pack coordinator/local-config path and relevant settings in its assignment. Do
+not bootstrap another coordinator or commit local settings for each worktree.
+A local file cannot grant repository integration authority. Legacy mixed configs
+need deliberate separation, preserving agreed merge authority and project facts;
+do not blindly copy one developer's coordinator or staffing into another pack.
+
 ## Roles and authority
 
 | Role | General agent name | Responsibility and handoff |
@@ -15,20 +38,24 @@ workflow and explicit user decisions; upstream changes require deliberate adopti
 | Cleanup | `cln-rat` | Audit a bounded area for maintainability problems; report findings or implement scoped fixes |
 | Workflow | `wfl-rat` | Maintain contributor guidance and tracker/repository setup; report changes, verified behavior, and setup gaps |
 
-The coordinator is the persistent project conversation by default. Adopting
-Ratpack authorizes it to create and manage task-scoped helpers, including
+Each pack's coordinator is its persistent developer conversation by default.
+Adopting Ratpack authorizes it to create and manage task-scoped helpers, including
 independent reviewers, where the host supports them. It delegates substantial
 implementation and may implement bounded work itself. Cleanup and workflow are
-optional support, not permanent staffing requirements. Every assignment names the outcome, acceptance criteria,
-owned paths, dependencies/contracts, checks, and handoff destination.
+optional support, not permanent staffing requirements. Every assignment names
+the outcome, acceptance criteria, owned paths, dependencies/contracts, checks,
+and handoff destination.
 
-Only the integration owner recorded in `ratpack.json` merges PRs, one at a time.
-The coordinator normally fills that responsibility; another assignment requires
-an explicit owner transfer. The user retains product and release authority.
-To transfer integration, the user names a replacement, the old owner stops and
-hands off the queue, and the record changes before the new owner merges. If the
-old owner is unavailable, confirm it will not merge and reconstruct the queue
-from GitHub. Conversation names and role selection do not confer authority.
+The shared `merge_policy` is `designated-integration-owner`: only the project's
+human-designated integration owner merges, one PR at a time. Record that shared
+assignment and handoff route in the tracker or the human's explicit instructions.
+A pack coordinator organizes its developer's work; it merges only if separately
+assigned integration authority. Other packs submit reviewed PRs to that owner.
+The user retains product and release authority. To transfer integration, the
+human names a replacement, the old owner stops and hands off the queue, and the
+shared assignment changes before the new owner merges. If the old owner is
+unavailable, confirm it will not merge and reconstruct the queue from GitHub.
+Conversation names, local config, and role selection do not confer authority.
 
 Authority is repository-specific: a conversation may coordinate one project
 and contribute to another without carrying merge rights or project context
@@ -38,11 +65,11 @@ spawning; additional spawning authority must be explicitly delegated.
 ### Staffing and contributors
 
 There is no separate delegation enable/disable step. At bootstrap, leave
-`max_implementation_agents` null unless the human already chose a count. When
-implementation is ready to start, the coordinator proposes a useful concurrent
+`ratpack.local.json`'s `max_implementation_agents` null unless that developer
+already chose a count. When implementation is ready to start, the coordinator proposes a useful concurrent
 implementor count and concrete task split; the human approves or chooses another.
-Record that count in `max_implementation_agents`. Null means the count has not
-been chosen; zero records an explicit choice to work without implementation
+Record that pack's count in its local `max_implementation_agents`. Null means
+the count has not been chosen; zero records an explicit choice to work without implementation
 helpers. Do not dispatch implementors before a positive count is approved.
 Reuse approval until changed; suggest an increase when growing implementation
 work justifies it, and wait before exceeding the approved count.
@@ -55,7 +82,8 @@ capacity; they do not require a separate enablement question. Honor explicit
 human restrictions on helpers and preserve existing staffing decisions during
 adoption upgrades. The retired `implementation_delegation_authorized` field is
 not used by this workflow; reconcile it against the human's actual instructions
-before removing it from an older project's configuration.
+before removing it from an older project's configuration. Existing shared
+staffing is legacy information, not an approval for every developer's pack.
 
 The human may create a separate conversation for any role. Register its actual
 owner and handoff route, have it read the project instructions and role brief,
@@ -100,7 +128,8 @@ recommended change. If the host cannot choose a suitable setting, disclose the
 fallback and continue only when it can meet acceptance; do not claim a switch.
 Compare quality, rework, and time on representative tasks, plus usage/cost only
 when available, before claiming an optimization. Keep temporary measurements in
-the tracker; record durable project model constraints in `ratpack.json`.
+the tracker, personal preferences local, and agreed project-wide model constraints
+in shared `ratpack.json`.
 
 ### Custom roles and native profiles
 

@@ -25,7 +25,7 @@ class PortabilityTest(unittest.TestCase):
                     project = Path(directory) / mode
                     project.mkdir()
                     subprocess.run([sys.executable, str(SCRIPTS / 'bootstrap.py'), str(project),
-                                    '--owner', 'coordinator', '--apply'], check=True, capture_output=True)
+                                    '--apply'], check=True, capture_output=True)
                     for args in (('init', '-b', 'main'),
                                  ('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
                                   '-c', 'commit.gpgsign=false', 'commit', '--allow-empty', '-m', 'Fixture'),
@@ -36,7 +36,6 @@ class PortabilityTest(unittest.TestCase):
                     marker = project / 'must-not-execute'
                     config['checks'] = [f'touch {marker}']
                     if mode != 'manual':
-                        config['max_implementation_agents'] = 4
                         config['github_repository'] = 'example/project'
                         config['linear_team'] = 'TEAM'
                     if mode != 'native':
